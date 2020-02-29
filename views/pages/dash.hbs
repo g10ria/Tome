@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{> head}}
+    <script src="js/dash.js" defer></script>
+</head>
+
+<body>
+
+    <div id="app">
+        <v-app v-cloak>
+            {{> nav}}
+
+            <v-container
+            class="mt-2 px-0"
+            fluid
+            style="width: 90%;">
+                <v-layout>
+
+                    <v-flex md8 xs12 class="pr-3">
+
+                        <v-card class="pt-3 pb-4 px-4" style="border-radius: 5px">
+                            <div class="lexend mb-1 ml-3">
+                                Reading Journal 📓
+                            </div>
+                            <v-form>
+                                <v-layout class="mb-2">
+                                    <v-flex xs10 style="margin: auto" class="mr-4">
+                                        <v-text-field placeholder="Entry title" hide-details solo></v-text-field>
+                                    </v-flex>
+                                    <v-spacer></v-spacer>
+                                    <v-flex xs2>
+                                        <v-btn class="my-4" color="primary">Add entry</v-btn>
+                                    </v-flex>
+                                </v-layout>
+                                
+                                <v-textarea box hide-details placeholder='Record your thoughts'></v-textarea>
+                                
+                            </v-form>
+                        </v-card>
+
+                        <v-card class="pa-4 mt-4">
+                            <div class="lexend ml-3">
+                                Club & Bookshelf Feed 📡
+                            </div>
+                            <v-list two-line class="mt-0">
+                                <template v-for="(item, index) in feedItems">
+                            
+                                    <v-divider v-if="item.divider" :key="index" :inset="item.inset"></v-divider>
+                            
+                                    <v-list-tile v-else :key="item.title" avatar @click="">
+                                        <v-list-tile-avatar>
+                                            <img :src="item.avatar">
+                                        </v-list-tile-avatar>
+                            
+                                        <v-list-tile-content>
+                                            <v-list-tile-title v-html="item.title"></v-list-tile-title>
+                                            <v-list-tile-sub-title v-html="item.subtitle"></v-list-tile-sub-title>
+                                        </v-list-tile-content>
+                                    </v-list-tile>
+                                </template>
+                            </v-list>
+                        </v-card>
+                        
+                    </v-flex>
+
+                    <v-flex md4 xs12 class="pl-3">
+                        <v-card class="pt-3 pb-4 px-4" style="border-radius: 5px">
+                            <div class="lexend mb-3 ml-3">
+                                Explore 📓
+                            </div>
+                            <v-divider></v-divider>
+
+                            <v-layout class="my-3">
+                                <v-flex xs6>
+                                    <img src="https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg" style="width: 75%;">
+                                        
+                                </v-flex>
+                                <v-flex xs6>
+                                    <div>Newton</div>
+                                    <div>William Blake</div>
+                                </v-flex>
+                            </v-layout>
+
+                            
+                        </v-card>
+                    </v-flex>
+
+                </v-layout>
+            </v-container>
+
+        </v-app>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+import * as Koa from "koa";
+import * as Router from "koa-router";
+import * as json from "koa-json";
+import * as logger from "koa-logger";
+import * as views from "koa-views";
+import * as bodyParser from "koa-bodyparser"
+import * as serve from 'koa-static'
+import * as session from 'koa-session'
+
+// import adminRouter from './routers/admin';
+// import studentRouter from './routers/student';
+// import authRouter from './routers/auth';
+
+// import rejectAuth from './middleware/rejectAdmin'
+
+import {
+    registerSingularComponent
+} from './helpers/componentRegistration'
+
+// import config from "./config"
+
+const app = new Koa();
+const router = new Router<Koa.DefaultState, Koa.Context>();
+
+const sessionConfig: Partial<session.opts> = {
+    // key: config.auth.cookieKeys[0],
+    maxAge: 1000 * 60 * 60 * 24 * 3 // 3 days
+}
+
+// app.keys = config.auth.cookieKeys.slice(1);
+app.use(session(sessionConfig, app));
+app.use(json());
+app.use(logger());
+app.use(bodyParser());
+app.use(views(__dirname + '/../views', {
+    map: {
+        hbs: "handlebars"
+    },
+    extension: "hbs"
+}));
+
+registerSingularComponent('./views/partials/head.hbs');
+registerSingularComponent('./views/partials/nav.hbs');
+
+console.log(__dirname+'/../views')
+router.get("/", async (ctx, next) => {
+    await ctx.render("pages/dash")
+});
+
+app.use(router.routes());
+// app.use(adminRouter.routes());
+
+app.use(serve('./static', {}))
+
+app.listen(3000, () => {
+    console.log("Server running on port 3000");
+});
+

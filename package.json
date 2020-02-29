@@ -1,0 +1,49 @@
+{
+  "name": "tome",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/g10ria/Tome.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/g10ria/Tome/issues"
+  },
+  "homepage": "https://github.com/g10ria/Tome#readme",
+  "dependencies": {
+    "@types/handlebars": "^4.1.0",
+    "@types/joi": "^14.3.4",
+    "@types/koa": "^2.11.0",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-json": "^2.0.18",
+    "@types/koa-logger": "^3.1.1",
+    "@types/koa-router": "^7.4.0",
+    "@types/koa-session": "^5.10.1",
+    "@types/koa-static": "^4.0.1",
+    "@types/koa-views": "^2.0.4",
+    "@types/ldapjs": "^1.0.5",
+    "@types/moment": "^2.13.0",
+    "@types/mongoose": "^5.7.0",
+    "@types/node": "^13.5.0",
+    "handlebars": "^4.7.2",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-joi-validate": "^0.5.1",
+    "koa-json": "^2.0.2",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^8.0.6",
+    "koa-session": "^5.13.1",
+    "koa-static": "^5.0.0",
+    "koa-views": "^6.2.1",
+    "ldapjs": "^1.0.2",
+    "moment": "^2.24.0",
+    "mongoose": "^5.8.9",
+    "typescript": "^3.7.5"
+  }
+}
