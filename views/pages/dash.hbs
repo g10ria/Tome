@@ -84,21 +84,19 @@
                     <v-flex md5 xs12 class="pl-3">
                         <v-card class="pt-3 pb-4 px-4" style="border-radius: 5px">
                             <div class="lexend mb-3 ml-3">
-                                Explore Today's Picks 📖
+                                Explore NY Times Picks 📖
                             </div>
                             <v-divider></v-divider>
 
-                            <v-layout class="my-3">
+                            <v-layout class="my-3" v-for="book in pickedBooks" style="cursor: pointer" @click="goto(book.href)">
                                 <v-flex xs5>
-                                    <img src="https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg" style="width: 75%;">
+                                    <img :src="`${book.src}`" style="width: 75%;">
                                         
                                 </v-flex>
                                 <v-flex xs7>
-                                    <div class="lexend" style="font-weight: 600">Newton</div>
-                                    <div class="roboto-condensed"> by William Blake</div>
-                                    <div class="roboto">Of Mice and Men tells the story of George Milton and
-                                    Lennie Small, two displaced migrant ranch workers, who move from place to place in California in search of new job
-                                    opportunities during the Great Depression in the United States.</div>
+                                    <div class="lexend" style="font-weight: 600">%{book.title}</div>
+                                    <div class="grey--text text--lighten-1"> by %{book.author}</div>
+                                    <div class="roboto">%{book.description}</div>
                                 </v-flex>
                             </v-layout>
                                                      

@@ -64,14 +64,33 @@ new Vue({
             {
                 src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg'
             }
-        ]
+        ],
+        pickedBooks: []
     },
     beforeCreate: function () {
         this.$vuetify.theme.primary = '#048BA8';
         this.$vuetify.theme.secondary = '#F29E4C'
     },
     created: function () {
-        
+        const NYTIMES_API_KEY = "hJdiVknafC3lnKrYX8U4K0bDFQJOlDOU"
+        const MAX_BOOKS = 3
+        let parsedBooks = []
+        makeRequest("GET", `https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${NYTIMES_API_KEY}`, {}, function (res) {
+            let data = JSON.parse(res.responseText)
+            let numBooks = data.num_results < MAX_BOOKS ? data.num_results : MAX_BOOKS
+            let books = data.results.books
+            
+            for(let i =0;i<numBooks;i++) {
+                parsedBooks.push({
+                    title: books[i].title,
+                    author: books[i].author,
+                    src: books[i].book_image,
+                    description: books[i].description,
+                    href: books[i].amazon_product_url
+                })
+            }
+        })
+        this.pickedBooks = parsedBooks
     },
     mounted: function () {
         // add arrow key support
@@ -87,6 +106,12 @@ new Vue({
         }.bind(this));
     },
     methods: {
+        goto: function(link) {
+            let li = document.createElement("a")
+            li.href = link
+            li.target = "_blank"
+            li.click()
+        },
         logout: function () {
             makeRequest("POST", "/auth/logout", {}, function (res) {
                 location.reload()

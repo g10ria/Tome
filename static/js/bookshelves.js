@@ -102,7 +102,9 @@ new Vue({
             this.books = requestedBooks
         },
         closeBookshelf: function() {
-            this.selectedBookshelf = 0
+            setTimeout(1000, function() {
+                this.selectedBookshelf = 0
+            }.bind(this))
             this.dialogs.bookshelf = false
         },
         parseGoogleVolumeJSON: function (rawData) {
