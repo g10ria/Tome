@@ -18,13 +18,77 @@
                     <v-flex xs12 class="pr-2">
                         <v-card class="pt-3 pb-2 px-4" style="border-radius: 5px">
                             <div class="lexend mb-1 ml-3">
-                                Books You've Read
+                                Your books 📚
                             </div>
                             <v-divider></v-divider>
 
                             <v-layout class="my-4" row wrap>
+
+                                <v-flex xs12 class="grey--text roboto mb-3 mx-3" style="text-decoration: underline" v-if="statusCount('Currently reading')!=0">Currently reading</v-flex>
+                                <v-flex xs3 class="mb-3 px-2" v-for="book in books" v-if="book.status=='Currently reading'">
+                                    <div>
+                                        <img class="mr-3" :src="book.src" style="width: 40%; border-radius: 5px; float: left">
+                                        <div class="lexend" style="font-weight: 600">%{book.title}</div>
+                                        <div class="grey--text text--lighten-1 roboto mb-3">by %{book.author}</div>
+                                        <div style="display: inline-table">
+                                            <v-icon style="display: table-cell; vertical-align: middle">calendar_today</v-icon>
+                                        </div>
+                                        <div style="display: inline-table">
+                                            <span style="display: table-cell; vertical-align: middle">%{book.date}</span>
+                                        </div>
                                 
-                                <v-flex xs3 class="mb-4 px-2" v-for="book in books">
+                                        <br>
+                                
+                                        <div style="display: inline-table">
+                                            <v-icon style="display: table-cell; vertical-align: middle">collections_bookmark</v-icon>
+                                        </div>
+                                        <div style="display: inline-table">
+                                            <span
+                                                style="display: table-cell; vertical-align: middle; text-overflow: ellipsis; overflow-x: hidden;white-space: nowrap; max-width: 100px">%{book.bookshelf}</span>
+                                        </div>
+                                    </div>
+                                </v-flex>
+
+                                <v-flex xs3 class="pb-4 px-2" v-if="statusCount('Currently reading')!=0">
+                                    <v-btn block outline dark color="secondary" class="mb-2 mr-5" style="width: 40%; border-radius: 5px; height: 100%;" @click="openAddBook">
+                                        <v-icon>add</v-icon>
+                                    </v-btn>
+                                </v-flex>
+
+                                <v-flex xs12 class="grey--text roboto mb-3 mx-3" style="text-decoration: underline" v-if="statusCount('Not started yet')!=0">Not started yet</v-flex>
+                                <v-flex xs3 class="mb-3 px-2" v-for="book in books" v-if="book.status=='Not started yet'">
+                                    <div>
+                                        <img class="mr-3" :src="book.src" style="width: 40%; border-radius: 5px; float: left">
+                                        <div class="lexend" style="font-weight: 600">%{book.title}</div>
+                                        <div class="grey--text text--lighten-1 roboto mb-3">by %{book.author}</div>
+                                        <div style="display: inline-table">
+                                            <v-icon style="display: table-cell; vertical-align: middle">calendar_today</v-icon>
+                                        </div>
+                                        <div style="display: inline-table">
+                                            <span style="display: table-cell; vertical-align: middle">%{book.date}</span>
+                                        </div>
+                                
+                                        <br>
+                                
+                                        <div style="display: inline-table">
+                                            <v-icon style="display: table-cell; vertical-align: middle">collections_bookmark</v-icon>
+                                        </div>
+                                        <div style="display: inline-table">
+                                            <span
+                                                style="display: table-cell; vertical-align: middle; text-overflow: ellipsis; overflow-x: hidden;white-space: nowrap; max-width: 100px">%{book.bookshelf}</span>
+                                        </div>
+                                    </div>
+                                </v-flex>
+
+                                <v-flex xs3 class="pb-4 px-2" v-if="statusCount('Not started yet')!=0">
+                                    <v-btn block outline dark color="secondary" class="mb-2 mr-5" style="width: 40%; border-radius: 5px; height: 100%;"
+                                        @click="openAddBook">
+                                        <v-icon>add</v-icon>
+                                    </v-btn>
+                                </v-flex>
+
+                                <v-flex xs12 class="grey--text roboto mb-3 mx-3" style="text-decoration: underline" v-if="statusCount('Finished reading')!=0">Finished reading</v-flex>
+                                <v-flex xs3 class="mb-3 px-2" v-for="book in books" v-if="book.status=='Finished reading'">
                                     <div>
                                         <img class="mr-3" :src="book.src"
                                             style="width: 40%; border-radius: 5px; float: left">
@@ -44,28 +108,17 @@
                                         </div>
                                         <div style="display: inline-table">
                                             <span
-                                                style="display: table-cell; vertical-align: middle; text-overflow: ellipsis; overflow-x: hidden;white-space: nowrap; max-width: 100px">%{book.bookclub}</span>
+                                                style="display: table-cell; vertical-align: middle; text-overflow: ellipsis; overflow-x: hidden;white-space: nowrap; max-width: 100px">%{book.bookshelf}</span>
                                         </div>
                                     </div>
-                                </v-flex>                                
-                                
-                                <v-flex xs3 class="pb-4 px-2">
-                                    <v-btn block outline dark color="secondary" class="mb-2 mr-5" style="width: 40%; border-radius: 5px; height: 100%;" @click="openAddBook">
+                                </v-flex>
+
+                                <v-flex xs3 class="pb-4 px-2" v-if="statusCount('Finished reading')!=0">
+                                    <v-btn block outline dark color="secondary" class="mb-2 mr-5" style="width: 40%; border-radius: 5px; height: 100%;"
+                                        @click="openAddBook">
                                         <v-icon>add</v-icon>
                                     </v-btn>
                                 </v-flex>
-
-                                <v-flex xs6>
-
-                                    
-                                    
-                                </v-flex>
-
-                                {{!-- <v-flex xs12 class="pb-4 px-2">
-                                    <v-btn block outline dark color="secondary" class="mb-2 mr-5" style="border-radius: 5px; height: 100%;" @click="openAddBook">
-                                        <v-icon>add</v-icon>
-                                    </v-btn>
-                                </v-flex> --}}
 
                             </v-layout>
 

@@ -23,7 +23,7 @@
                             <v-divider></v-divider>
 
                             <v-layout class="my-4" row wrap v-for="shelf in bookshelves">
-                                <v-flex xs7 class="mb-2 pr-5">
+                                <v-flex xs10 class="mb-2 pr-5">
                                     <span class="lexend" style="font-weight: 600">%{shelf.name}</span>
                                     <span class="grey--text text--lighten-1"> created by %{shelf.owner}</span>
                                     <div class="roboto">%{shelf.description}</div>
@@ -32,22 +32,10 @@
                                         You've read 3 out of the 6 books on this bookshelf.
                                     </div>
                                 </v-flex>
-                                <v-flex xs5>
+                                <v-flex xs2>
                                     
-                                    <v-layout row wrap>
-                                        <v-flex xs12>
-                                            <div class="lexend" style="font-weight: 600">You are currently reading</div>
-                                        </v-flex>
-                                        <v-flex xs6>
-                                            <img class="mt-2" src="https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg"
-                                                style="width: 90%; border-radius: 5px;">
-                                    
-                                        </v-flex>
-                                        <v-flex xs6 class="mt-2">
-                                            <div class="lexend">The Essex Serpent</div>
-                                            <div class="grey--text text--lighten-1">by Blake Lively</div>
-                                        </v-flex>
-                                    </v-layout>
+                                    <img class="mt-2" src="https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg"
+                                        style="width: 90%; border-radius: 5px;">
                                     
                                 </v-flex>
                             </v-layout>

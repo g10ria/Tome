@@ -4,7 +4,7 @@ new Vue({
     data: {
         fullName: "Amelia Smith",
         dialogs: {
-            addBook: true,
+            addBook: false,
             addBookConfirmClose: false
         },
         info: {
@@ -22,17 +22,10 @@ new Vue({
         bookshelves: [],
         bookshelfIDs: [],
         selectedBookshelf: "",
-        statuses: ["Not read yet", "Currently reading", "Finished reading"],
+        statuses: ["Not started yet", "Currently reading", "Finished reading"],
         selectedStatus: "",
-        books: [
-            {
-                "title": "The Essex Serpent",
-                "author": "Gabriella Murphy",
-                "src": "https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg",
-                "date": "Jan 1, 2020",
-                "bookclub": "Han Dynasty"
-            }
-        ],
+        bookGIDs: [],
+        books: [],
         descriptionLimit: 60,
         bookResults: [],
         searchIsLoading: false,
@@ -49,6 +42,25 @@ new Vue({
             let data = JSON.parse(res.responseText)
             this.bookshelves = data.names
             this.bookshelfIDs = data.ids
+        }.bind(this))
+        makeRequest("GET", '/user/books/all', {}, function(res) {
+            let data = JSON.parse(res.responseText) // we get the bookGIDs and the reading status
+            
+            let requestedBooks = []
+            for (let i = 0; i < data.length;i++) {
+                makeRequest("GET", `https://www.googleapis.com/books/v1/volumes/${data[i].bookGID}`, {}, function(res) {
+                    // getting book data from google api for each book
+                    let data2 = JSON.parse(res.responseText)
+                    let requestedBook = this.parseGoogleVolumeJSON(data2)
+
+                    // parsing and setting fields for rendering
+                    requestedBook["status"] = data[i].status
+                    requestedBook["date"] = data[i].status=='Finished reading' ? this.niceDate(new Date(data[i].date)) : data[i].date
+                    requestedBook["bookshelf"] = data[i].bookshelfName
+                    requestedBooks.push(requestedBook)
+                }.bind(this))
+            }
+            this.books = requestedBooks
         }.bind(this))
     },
     computed: {
@@ -82,6 +94,13 @@ new Vue({
                 location.reload()
             })
         },
+        statusCount: function(str) {
+            let count = 0
+            for(let i=0;i<this.books.length;i++) {
+                if (this.books[i].status==str) count++
+            }
+            return count
+        },
         goto: function (url) {
             window.location.href = url
         },
@@ -103,15 +122,14 @@ new Vue({
                 if (this.bookshelves[i]==this.selectedBookshelf) bookshelfID = this.bookshelfIDs[i]
             }
 
-            if (this.selectedStatus == 'Finished reading') {
-                this.books.push({
-                    "title": book.title,
-                    "author": book.author,
-                    "src": book.src,
-                    "date": this.niceDate(new Date()), // needs fixing
-                    "bookclub": this.selectedBookshelf
-                })
-            }
+            this.books.push({
+                "title": book.title,
+                "author": book.author,
+                "src": book.src,
+                "date": this.niceDate(new Date()), // needs fixing
+                "bookshelf": this.selectedBookshelf,
+                "status": this.selectedStatus 
+            })
             
             // todo: error/success messages
             makeRequest("POST", "/user/book/addnew", {
@@ -130,11 +148,6 @@ new Vue({
             this.bookGID = -1
             this.bookSrc = ""
             this.bookAuthor = ""
-        },
-        searchBooks: function() {
-            makeRequest("GET", "https://www.googleapis.com/books/v1/volumes?q=hello&maxResults=1&orderBy=relevance", {}, function (res) {
-                console.log(res)
-            })
         },
         niceDate: function(date) {
             return date.toString().substring(4,15)
@@ -155,6 +168,38 @@ new Vue({
             this.bookGID = -1
             this.bookSrc = ""
             this.bookAuthor = ""
+        },
+        parseGoogleVolumeJSON: function(rawData) {
+            // get title
+            let title = rawData.volumeInfo.title
+
+            let description = rawData.volumeInfo.description ? rawData.volumeInfo.description : "No description"
+
+            // get authors (if there is no author, it just doesn't return the field so return 'Unknown')
+            // can be multiple authors
+            let author = ""
+            if (rawData.volumeInfo.authors) {
+                let authors = rawData.volumeInfo.authors
+                for (let i = 0; i < authors.length; i++) {
+                    author += authors[i]
+                    if (i < authors.length && i != 0) author += ", "
+                }
+            } else author = "Unknown"
+
+            // get src link for the image (sometimes undefined, why google)
+            let src = rawData.volumeInfo.imageLinks &&
+                rawData.volumeInfo.imageLinks.thumbnail ? rawData.volumeInfo.imageLinks.thumbnail :
+                "https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg"
+
+            let id = rawData.id
+
+            return {
+                title,
+                description,
+                author,
+                src,
+                id
+            }
         }
     },
     watch: {
@@ -174,44 +219,12 @@ new Vue({
                 if (books) {
                     let parsedBooks = []
                     for (let i = 0; i < books.length; i++) {
-
-                        // get title
-                        let title = books[i].volumeInfo.title
-
-                        let description = books[i].volumeInfo.description ? books[i].volumeInfo.description : "No description"
-
-                        // get authors (if there is no author, it just doesn't return the field so return 'Unknown')
-                        // can be multiple authors
-                        let author = ""
-                        if (books[i].volumeInfo.authors) {
-                            let authors = books[i].volumeInfo.authors
-                            for (let i = 0; i < authors.length; i++) {
-                                author += authors[i]
-                                if (i < authors.length && i!=0) author += ", "
-                            }
-                        } else author = "Unknown"
-
-                        // get src link for the image (sometimes undefined, why google)
-                        let src = books[i].volumeInfo.imageLinks &&
-                            books[i].volumeInfo.imageLinks.thumbnail ? books[i].volumeInfo.imageLinks.thumbnail :
-                            "https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg"
-
-                        let id = books[i].id
-                        
-                        parsedBooks.push({
-                            title,
-                            description,
-                            author,
-                            src,
-                            id
-                        })
+                        parsedBooks.push(this.parseGoogleVolumeJSON(books[i]))
                     }
                     this.bookResults = parsedBooks
                     this.searchIsLoading = false
                 }               
             }.bind(this))
-
-
         }
     }
 })

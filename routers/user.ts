@@ -70,20 +70,19 @@ router.get("/bookshelves/names", async(ctx, next) => {
 router.post("/book/addnew", async(ctx, next) => {
     let body = ctx.request.body
 
-    console.log(body)
-
     await Bookshelf.updateOne({ _id: new ObjectID(body.bookshelfID) },
         {$push: { books: body.bookID }})
 
     let bookshelf = await Bookshelf.findOne({ _id: new ObjectID(body.bookshelfID) })
-    console.log(bookshelf)
 
     let numBooks = bookshelf.books.length
 
     let newBook = {
         bookshelf: bookshelf.id,
         index: numBooks-1,
-        status: body.status
+        status: body.status,
+        // todo: test this
+        date: body.status=="Finished reading" ? new Date().toISOString() : undefined
     }
     await User.update(
         { username: ctx.session.username },
@@ -94,6 +93,23 @@ router.post("/book/addnew", async(ctx, next) => {
 
 router.get("/books", async (ctx, next) => {
     await ctx.render("pages/booksread")
+})
+
+router.get("/books/all", async (ctx, next) => {
+    let user =  await userFromUsername(ctx.session.username)
+    let parsedBooks = []
+    // getting the google ids of each book
+    for(let i=0;i<user.books.length;i++) {
+        let bookshelf = await bookshelfFromID(new ObjectID(user.books[i].bookshelf))
+        let bookGID = bookshelf.books[user.books[i].index]
+        parsedBooks.push({
+            status: user.books[i].status,
+            bookGID: bookGID,
+            bookshelfName: bookshelf.name,
+            date: user.books[i].date ? user.books[i].date : "-"
+        })
+    }
+    ctx.body = parsedBooks
 })
 
 router.get("/bookclubs", async (ctx, next) => {

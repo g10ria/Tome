@@ -22,7 +22,6 @@ new Vue({
     created: function () {
         makeRequest("GET", '/user/bookshelves/all', {}, function (res) {
             this.bookshelves = JSON.parse(res.responseText)
-            console.log(this.bookshelves)
         }.bind(this))
     },
     mounted: function () {

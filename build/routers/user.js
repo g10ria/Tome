@@ -6,6 +6,7 @@ const bookshelf_1 = require("../models/bookshelf");
 const requireAuth_1 = require("../middleware/requireAuth");
 // import user from "../models/user";
 const userHelpers_1 = require("../helpers/userHelpers");
+const bookshelfHelpers_1 = require("../helpers/bookshelfHelpers");
 const mongodb_1 = require("mongodb");
 const router = new Router();
 router.prefix("/user");
@@ -57,21 +58,37 @@ router.get("/bookshelves/names", async (ctx, next) => {
 });
 router.post("/book/addnew", async (ctx, next) => {
     let body = ctx.request.body;
-    console.log(body);
     await bookshelf_1.default.updateOne({ _id: new mongodb_1.ObjectID(body.bookshelfID) }, { $push: { books: body.bookID } });
     let bookshelf = await bookshelf_1.default.findOne({ _id: new mongodb_1.ObjectID(body.bookshelfID) });
-    console.log(bookshelf);
     let numBooks = bookshelf.books.length;
     let newBook = {
         bookshelf: bookshelf.id,
         index: numBooks - 1,
-        status: body.status
+        status: body.status,
+        // todo: test this
+        date: body.status == "Finished reading" ? new Date().toISOString() : undefined
     };
     await user_1.default.update({ username: ctx.session.username }, { $push: { books: newBook } });
     ctx.body = "Book successfully added";
 });
 router.get("/books", async (ctx, next) => {
     await ctx.render("pages/booksread");
+});
+router.get("/books/all", async (ctx, next) => {
+    let user = await userHelpers_1.userFromUsername(ctx.session.username);
+    let parsedBooks = [];
+    // getting the google ids of each book
+    for (let i = 0; i < user.books.length; i++) {
+        let bookshelf = await bookshelfHelpers_1.bookshelfFromID(new mongodb_1.ObjectID(user.books[i].bookshelf));
+        let bookGID = bookshelf.books[user.books[i].index];
+        parsedBooks.push({
+            status: user.books[i].status,
+            bookGID: bookGID,
+            bookshelfName: bookshelf.name,
+            date: user.books[i].date ? user.books[i].date : "-"
+        });
+    }
+    ctx.body = parsedBooks;
 });
 router.get("/bookclubs", async (ctx, next) => {
     await ctx.render("pages/clubs");

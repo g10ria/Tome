@@ -35,7 +35,7 @@ const UserSchema = new mongoose.Schema({
         status: {
             type: String
         },
-        reflection: {
+        date: {
             type: String
         }
     }],
@@ -71,9 +71,9 @@ export type UserProps = {
     bookshelves?: String[],
     books?: {
         bookshelf: String,
-        index: Number,
+        index: number,
         status: String,
-        reflection: String
+        date?: String
     }[],
     bookclubs?: String[],
     journalentries?: {
