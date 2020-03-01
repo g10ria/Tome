@@ -3,7 +3,7 @@
 
 <head>
     {{> head}}
-    <script src="js/dash.js" defer></script>
+    <script src="../js/dash.js" defer></script>
 </head>
 
 <body>
@@ -26,16 +26,32 @@
                             </div>
                             <v-form>
                                 <v-layout class="mb-2">
-                                    <v-flex xs9 style="margin: auto" class="mr-4">
-                                        <v-text-field placeholder="Entry title" hide-details solo></v-text-field>
+                                    <v-flex xs7 style="margin: auto" class="mr-4">
+                                        <v-text-field placeholder="Entry title" hide-details solo v-model="entryName"></v-text-field>
+                                    </v-flex>
+                                    <v-flex xs2 style="margin: auto;">
+                                        
+                                        <v-menu offset-y min-width="160">
+                                            <template v-slot:activator="{on: menu}">
+                                                <div :style="`height: 40px; width: 40px; background-color: #${colorOptions[selectedColor].hex}; border-radius: 50%; cursor: pointer`" v-on="{...menu}"></div>
+                                            </template>
+                                        
+                                            {{!-- options in the menu --}}
+                                            <v-list>
+                                                <v-list-tile ripple v-for="(color, index) in colorOptions" @click="selectColor(index)">
+                                                    <v-list-tile-title class="mx-2 roboto" :style="`color: #${color.hex}`"> %{color.name} </v-list-tile-title>
+                                                </v-list-tile>
+                                            </v-list>
+                                        </v-menu>
+
                                     </v-flex>
                                     <v-spacer></v-spacer>
                                     <v-flex xs3>
-                                        <v-btn class="my-4" color="primary">Add entry</v-btn>
+                                        <v-btn class="my-4" color="primary" @click="submitJournal">Add entry</v-btn>
                                     </v-flex>
                                 </v-layout>
                                 
-                                <v-textarea box hide-details placeholder='Record your thoughts'></v-textarea>
+                                <v-textarea box hide-details placeholder='Record your thoughts' v-model="entryContent"></v-textarea>
                                 
                             </v-form>
                         </v-card>

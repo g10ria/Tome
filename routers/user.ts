@@ -1,13 +1,12 @@
 import * as Koa from "koa";
 import * as Router from "koa-router";
 
-import * as validator from 'koa-joi-validate';
-import * as Joi from 'joi';
-import moment = require("moment");
-
 import User from "../models/user";
 
 import requireAuth from '../middleware/requireAuth';
+// import user from "../models/user";
+
+import { userFromUsername } from '../helpers/userHelpers'
 
 const router = new Router<Koa.DefaultState, Koa.Context>();
 router.prefix("/user");
@@ -22,16 +21,32 @@ router.get("/bookshelves", async(ctx, next) => {
     await ctx.render("pages/bookshelves")
 })
 
-router.get("/booksread", async (ctx, next) => {
+router.get("/books", async (ctx, next) => {
     await ctx.render("pages/booksread")
 })
 
-router.get("/clubs", async (ctx, next) => {
+router.get("/bookclubs", async (ctx, next) => {
     await ctx.render("pages/clubs")
 })
 
 router.get("/journal", async (ctx, next) => {
     await ctx.render("pages/journal")
+})
+
+router.get("/journalentries", async (ctx, next) => {
+    let user = await userFromUsername(ctx.session.username)
+    console.log(user.journalentries)
+    ctx.body = user.journalentries
+})
+
+router.post("/journal", async (ctx, next) => {
+    let body = ctx.request.body
+    let user = await userFromUsername(ctx.session.username)
+    await User.update(
+        { _id: user.id },
+        { $push: { journalentries: body } }
+    )
+    ctx.body = body
 })
 
 // router.get("/dropins/all",

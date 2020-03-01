@@ -39,20 +39,49 @@ const UserSchema = new mongoose.Schema({
         reflection: {
             type: String
         }
+    }],
+    bookclubs: [{
+        type: String
+    }],
+    journalentries: [{
+        name: {
+            type: String,
+            required: true
+        },
+        content: {
+            type: String,
+            required: true
+        },
+        date: {
+            type: String, // ISOstring format
+            required: true
+        },
+        color: {
+            type: String,
+            required: true
+        }
     }]
 });
 
 export type UserProps = {
     fullName: String,
+    password: String,
     email: String,
     pfp: String,
     bookshelves: String[],
-    books: [{
+    books: {
         bookshelf: String,
         index: Number,
         status: Number,
         reflection: String
-    }]
+    }[],
+    bookclubs: String[],
+    journalentries: {
+        name: String,
+        content: String,
+        date: String,
+        color: String
+    }[]
 };
 
 export type User = mongoose.Document & UserProps;

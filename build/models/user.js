@@ -39,6 +39,27 @@ const UserSchema = new db_1.default.Schema({
             reflection: {
                 type: String
             }
+        }],
+    bookclubs: [{
+            type: String
+        }],
+    journalentries: [{
+            name: {
+                type: String,
+                required: true
+            },
+            content: {
+                type: String,
+                required: true
+            },
+            date: {
+                type: String,
+                required: true
+            },
+            color: {
+                type: String,
+                required: true
+            }
         }]
 });
 exports.default = db_1.default.model("User", UserSchema);

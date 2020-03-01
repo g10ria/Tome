@@ -83,9 +83,15 @@ new Vue({
     },
     methods: {
         logout: function () {
-            makeRequest("POST", "../auth/logout", {}, function (res) {
+            makeRequest("POST", "/auth/logout", {}, function (res) {
                 location.reload()
             })
+        },
+        goto: function (url) {
+            window.location.href = url
+        },
+        niceDate: function (date) {
+            return date.toString().substring(4, 15)
         },
         openAddBook: function() {
             this.dialogs.addBook = true

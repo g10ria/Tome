@@ -44,9 +44,10 @@ app.use(views(__dirname + '/../views', {
 registerSingularComponent('./views/partials/head.hbs');
 registerSingularComponent('./views/partials/nav.hbs');
 
+
 console.log(__dirname+'/../views')
 router.get("/", async (ctx, next) => {
-    if (!ctx.session || !ctx.session.user) {
+    if (!ctx.session || !ctx.session.username) {
         await ctx.render("pages/login")
     } else {
         await ctx.redirect("/user")

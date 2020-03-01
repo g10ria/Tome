@@ -29,7 +29,6 @@
             </v-btn>
         </template>
         
-
         <span>Logout</span>
 
     </v-tooltip>
@@ -37,7 +36,7 @@
 </v-toolbar>
 
 <v-navigation-drawer v-model="drawer" absolute temporary>
-    <v-list class="pa-1">
+    <v-list class="pa-1 pl-2">
         <v-list-tile avatar>
             <v-list-tile-avatar>
                 <img src="https://previews.123rf.com/images/ammentorp/ammentorp1704/ammentorp170400278/77014947-square-portrait-of-young-woman-with-sunglasses-against-beige-background-caucasian-female-fashion-mod.jpg">
@@ -52,7 +51,7 @@
     <v-list class="pt-0">
         <v-divider></v-divider>
 
-        <v-list-tile>
+        <v-list-tile @click="goto('/user')">
             <v-list-tile-action>
                 <v-icon>home</v-icon>
             </v-list-tile-action>
@@ -62,15 +61,46 @@
             </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile>
+        <v-list-tile @click="goto('/user/journal')">
             <v-list-tile-action>
-                <v-icon>home</v-icon>
+                <v-icon>menu_book</v-icon>
             </v-list-tile-action>
         
             <v-list-tile-content>
-                <v-list-tile-title>Home</v-list-tile-title>
+                <v-list-tile-title>Journal</v-list-tile-title>
             </v-list-tile-content>
         </v-list-tile>
+
+        <v-list-tile @click="goto('/user/bookshelves')">
+            <v-list-tile-action>
+                <v-icon>bookmarks</v-icon>
+            </v-list-tile-action>
+        
+            <v-list-tile-content>
+                <v-list-tile-title>Bookshelves</v-list-tile-title>
+            </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile @click="goto('/user/bookclubs')">
+            <v-list-tile-action>
+                <v-icon>people</v-icon>
+            </v-list-tile-action>
+        
+            <v-list-tile-content>
+                <v-list-tile-title>Book clubs</v-list-tile-title>
+            </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile @click="goto('/user/books')">
+            <v-list-tile-action>
+                <v-icon>book</v-icon>
+            </v-list-tile-action>
+        
+            <v-list-tile-content>
+                <v-list-tile-title>Book history</v-list-tile-title>
+            </v-list-tile-content>
+        </v-list-tile>
+
     </v-list>
 
 </v-navigation-drawer>

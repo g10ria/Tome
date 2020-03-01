@@ -8,6 +8,25 @@ new Vue({
         },
         info: {
         },
+        colorOptions: [{
+            name: "Apricot",
+            hex: "F29E4C"
+        }, {
+            name: "Storm",
+            hex: "048BA8"
+        }, {
+            name: "Heather",
+            hex: "787878"
+        }, {
+            name: "Plum",
+            hex: "A4036F"
+        }, {
+            name: "Wheat",
+            hex: "F3C969"
+        }],
+        entryName: "",
+        entryContent: "",
+        selectedColor: 0,
         snackbar: {
             success: false,
             error: false,
@@ -69,9 +88,32 @@ new Vue({
     },
     methods: {
         logout: function () {
-            makeRequest("POST", "../auth/logout", {}, function (res) {
+            makeRequest("POST", "/auth/logout", {}, function (res) {
                 location.reload()
             })
+        },
+        goto: function (url) {
+            window.location.href = url
+        },
+        niceDate: function (date) {
+            return date.toString().substring(4, 15)
+        },
+        submitJournal: function () {
+            makeRequest("POST", "/user/journal", {
+                name: this.entryName,
+                content: this.entryContent,
+                date: new Date().toISOString(),
+                color: this.colorOptions[this.selectedColor].hex
+            }, function (res) {
+                // todo check success/error
+                this.entryName = ""
+                this.entryContent = ""
+                this.selectedColor = 0
+            }.bind(this))
+
+        },
+        selectColor: function (index) {
+            this.selectedColor = index
         }
     }
 })

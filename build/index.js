@@ -37,7 +37,7 @@ componentRegistration_1.registerSingularComponent('./views/partials/head.hbs');
 componentRegistration_1.registerSingularComponent('./views/partials/nav.hbs');
 console.log(__dirname + '/../views');
 router.get("/", async (ctx, next) => {
-    if (!ctx.session || !ctx.session.user) {
+    if (!ctx.session || !ctx.session.username) {
         await ctx.render("pages/login");
     }
     else {

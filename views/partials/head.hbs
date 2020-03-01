@@ -7,7 +7,7 @@
 <link
     href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons|Roboto+Condensed|Lexend+Deca"
     rel="stylesheet">
-<script src="js/makeRequest.js"></script>
+<script src="../js/makeRequest.js"></script>
 
 {{!-- TODO: download/change to minified versions --}}
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -25,7 +25,12 @@
         user-select: none;
     }
 
-    {{!-- hide page before vue scripts load --}}
+        {
+            {
+             !-- hide page before vue scripts load --
+        }
+    }
+
     [v-cloak] {
         display: none
     }

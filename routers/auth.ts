@@ -19,7 +19,7 @@ router.post("/", rejectAuth, async (ctx, next) => {
     if (!body.password || typeof body.password != 'string')
         ctx.throw(400, 'A password was not provided.');
     try {
-        ctx.session.user = await findUser(body.username, body.password)
+        ctx.session.username = (await findUser(body.username, body.password)).username
         ctx.body = "Login successful. Redirecting...";
     } catch (e) {
         console.log(e);
@@ -28,7 +28,7 @@ router.post("/", rejectAuth, async (ctx, next) => {
 });
 
 router.post("/logout", requireAuth, async (ctx, next) => {
-    delete ctx.session.user;
+    delete ctx.session.username;
 });
 
 
