@@ -24,11 +24,11 @@ const BookshelfSchema = new mongoose.Schema({
 });
 
 export type BookshelfProps = {
-    owner: String,
-    name: String,
-    description: String,
-    src: String,
-    books: String[]
+    owner: string,
+    name: string,
+    description: string,
+    src: string,
+    books: string[]
 };
 
 export type Bookshelf = mongoose.Document & BookshelfProps;

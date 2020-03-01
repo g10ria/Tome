@@ -23,11 +23,11 @@ const BookclubSchema = new mongoose.Schema({
 });
 
 export type BookclubProps = {
-    owner: String,
-    name: String,
-    description: String,
-    bookshelves: String[],
-    numMembers: Number
+    owner: string,
+    name: string,
+    description: string,
+    bookshelves: string[],
+    numMembers: number
 };
 
 export type Bookclub = mongoose.Document & BookclubProps;

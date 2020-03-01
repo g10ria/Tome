@@ -35,7 +35,7 @@
                                     <v-chip color="secondary" dark>Books: %{bookclub.numBooks}</v-chip>
                                 </v-flex>
                                 <v-flex xs12 class="mt-2">
-                                    <div>
+                                    <div v-if="bookclub.bookshelves.length!=0">
                                         Bookshelves:
                                     </div>
                                     <v-chip label v-for="bookshelf in bookclub.bookshelves">%{bookshelf}</v-chip>

@@ -78,8 +78,13 @@ new Vue({
         },
         submitAddClub: function() {
             // todo: actually submit
+            makeRequest("POST", "/user/bookclubs/join", {
+                id: this.selectedClub.id
+            }, function(res) {
+                this.bookclubs.push(JSON.parse(res.responseText))
+                this.dialogs.addClub = false
+            }.bind(this))
             // clean input
-            this.dialogs.addClub = false
         },
         closeAddClub: function() {
             this.dialogs.confirmCloseAddClub = true

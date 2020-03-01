@@ -63,24 +63,24 @@ const UserSchema = new mongoose.Schema({
 });
 
 export type UserProps = {
-    fullName: String,
-    username: String,
-    password: String,
-    email: String,
-    pfp: String,
-    bookshelves?: String[],
+    fullName: string,
+    username: string,
+    password: string,
+    email: string,
+    pfp: string,
+    bookshelves?: string[],
     books?: {
-        bookshelf: String,
+        bookshelf: string,
         index: number,
-        status: String,
-        date?: String
+        status: string,
+        date?: string
     }[],
-    bookclubs?: String[],
+    bookclubs?: string[],
     journalentries?: {
-        name: String,
-        content: String,
-        date: String,
-        color: String
+        name: string,
+        content: string,
+        date: string,
+        color: string
     }[]
 };
 

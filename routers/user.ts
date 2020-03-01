@@ -44,15 +44,14 @@ router.post("/bookshelves/createnew", async (ctx, next) => {
         name: bookshelf.name,
         description: bookshelf.description,
         src: bookshelf.src,
-        bookGIDs: bookshelf.books,
-        stats: "You've finished 3 out of 6 books on this bookshelf." // todo: actually do this lol
+        bookGIDs: bookshelf.books
     }
 })
 
 router.get("/bookshelves/all", async (ctx, next) => {
     let user = await userFromUsername(ctx.session.username)
-    let ids = user.bookshelves
-    ids = ids.map(id => {
+    let shelfIDs = user.bookshelves
+    let ids = shelfIDs.map(id => {
         return new ObjectID(id)
     })
     let shelves = await Bookshelf.find({
@@ -79,8 +78,8 @@ router.get("/bookshelves/all", async (ctx, next) => {
 
 router.get("/bookshelves/names", async (ctx, next) => {
     let user = await userFromUsername(ctx.session.username)
-    let ids = user.bookshelves
-    ids = ids.map(id => {
+    let shelfIDs = user.bookshelves
+    let ids : ObjectID[] = shelfIDs.map(id => {
         return new ObjectID(id)
     })
     let shelves = await Bookshelf.find({
@@ -92,6 +91,21 @@ router.get("/bookshelves/names", async (ctx, next) => {
     ctx.body = {
         names, ids: shelfids
     };
+})
+
+router.get("/bookshelves/explore", async(ctx, next) => {
+    let user = await userFromUsername(ctx.session.username)
+    // do this lol
+    // let matchingClubs = await Bookclub.find({
+    //     $and: [
+    //         {
+    //             _id: { $nin: ids }
+    //         },
+    //         {
+    //             name: { $regex: new RegExp(ctx.query.query, 'i') }
+    //         }
+    //     ]
+    // })
 })
 
 router.post("/book/addnew", async (ctx, next) => {
@@ -143,10 +157,50 @@ router.get("/bookclubs", async (ctx, next) => {
     await ctx.render("pages/clubs")
 })
 
+router.post("/bookclubs/join", async (ctx, next) => {
+    let user = await userFromUsername(ctx.session.username)
+    let clubID = ctx.request.body.id
+    let club = await Bookclub.findOne({ _id: clubID })
+
+    await User.updateOne({ _id: user.id }, {
+        $push: { bookclubs: clubID }
+    })
+    await Bookclub.updateOne({ _id: clubID }, { // increment numMembers by 1
+        $inc: { numMembers: 1 }
+    })
+
+    // obtain an array of the names of the bookshelves in the club
+    let ids = club.bookshelves
+    let shelfIDs: ObjectID[] = ids.map(id => {
+        return new ObjectID(id)
+    })
+    let shelves = await Bookshelf.find({
+        _id: { $in: shelfIDs }
+    })
+    let bookshelves = shelves.map(shelf => { return shelf.name })
+
+    // aggregate the total number of books in the club
+    let numBooks = 0
+    shelves.forEach(shelf => numBooks += shelf.books.length)
+
+    // getting the name of the owner
+    let owner = (await userFromID(new ObjectID(club.owner))).fullName
+
+    ctx.body = ({
+        owner,
+        name: club.name,
+        description: club.description,
+        bookshelves,
+        numMembers: club.numMembers + 1,
+        numBooks,
+        isOwner: false
+    })
+})
+
 router.get("/bookclubs/all", async (ctx, next) => {
     let user = await userFromUsername(ctx.session.username)
-    let ids = user.bookclubs
-    ids = ids.map(id => {
+    let clubIDs = user.bookclubs
+    let ids : ObjectID[] = clubIDs.map(id => {
         return new ObjectID(id)
     })
     let clubs = await Bookclub.find({
@@ -159,8 +213,8 @@ router.get("/bookclubs/all", async (ctx, next) => {
     for (let i = 0; i < clubs.length; i++) {
 
         // obtain an array of the names of the bookshelves in the club
-        let shelfIDs = clubs[i].bookshelves
-        shelfIDs = shelfIDs.map(id => {
+        let ids = clubs[i].bookshelves
+        let shelfIDs : ObjectID[] = ids.map(id => {
             return new ObjectID(id)
         })
         let shelves = await Bookshelf.find({
@@ -193,8 +247,8 @@ router.get("/bookclubs/all", async (ctx, next) => {
 
 router.get("/bookclubs/search", async (ctx, next) => {
     let user = await userFromUsername(ctx.session.username)
-    let ids = user.bookclubs
-    ids = ids.map(id => {
+    let clubIDs = user.bookclubs
+    let ids : ObjectID[] = clubIDs.map(id => {
         return new ObjectID(id)
     })
 
@@ -215,7 +269,8 @@ router.get("/bookclubs/search", async (ctx, next) => {
             owner: (await userFromID(new ObjectID(matchingClubs[i].owner))).fullName,
             name: matchingClubs[i].name,
             numMembers: matchingClubs[i].numMembers,
-            numBookshelves: matchingClubs[i].bookshelves.length
+            numBookshelves: matchingClubs[i].bookshelves.length,
+            id: matchingClubs[i].id
         })
     }
     ctx.body = parsedMatchingClubs
