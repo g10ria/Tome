@@ -30,36 +30,13 @@ new Vue({
                 "src": "https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg",
                 "date": "Jan 1, 2020",
                 "bookclub": "Han Dynasty"
-            },
-            {
-                "title": "The Essex Serpent",
-                "author": "Gabriella Murphy",
-                "src": "https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg",
-                "date": "Jan 1, 2020",
-                "bookclub": "Han Dynasty"
-            },
-            {
-                "title": "The Essex Serpent",
-                "author": "Gabriella Murphy",
-                "src": "https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg",
-                "date": "Jan 1, 2020",
-                "bookclub": "Han Dynasty"
-            },
-            {
-                "title": "The Essex Serpent",
-                "author": "Gabriella Murphy",
-                "src": "https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg",
-                "date": "Jan 1, 2020",
-                "bookclub": "Han Dynasty"
-            },
-            {
-                "title": "The Essex Serpent",
-                "author": "Gabriella Murphy",
-                "src": "https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg",
-                "date": "Jan 1, 2020",
-                "bookclub": "Han Dynasty"
             }
-        ]
+        ],
+        descriptionLimit: 60,
+        bookResults: [],
+        searchIsLoading: false,
+        model: null,
+        search: null
     },
     beforeCreate: function () {
         this.$vuetify.theme.primary = '#048BA8';
@@ -67,6 +44,21 @@ new Vue({
         this.$vuetify.theme.tertiary = '#F3C969'
     },
     created: function () {
+        
+    },
+    computed: {
+        searchItems() {
+            // console.log(this.bookResults)
+            // return this.bookResults
+            return this.bookResults.map(entry => {
+                let titleandauthor = entry.title + " by " + entry.author
+                titleandauthor = titleandauthor.length > this.titleandauthorlimit
+                    ? titleandauthor.slice(0, this.descriptionLimit) + '...'
+                    : titleandauthor
+
+                return Object.assign({}, entry, { titleandauthor })
+            })
+        }
     },
     mounted: function () {
         // add arrow key support
@@ -118,6 +110,11 @@ new Vue({
             this.bookSrc = ""
             this.bookAuthor = ""
         },
+        searchBooks: function() {
+            makeRequest("GET", "https://www.googleapis.com/books/v1/volumes?q=hello&maxResults=1&orderBy=relevance", {}, function (res) {
+                console.log(res)
+            })
+        },
         niceDate: function(date) {
             return date.toString().substring(4,15)
         },
@@ -137,6 +134,57 @@ new Vue({
             this.bookISBN = -1
             this.bookSrc = ""
             this.bookAuthor = ""
+        }
+    },
+    watch: {
+        search(query) {
+
+            if (!query || query.length==0) { // empty query
+                this.bookResults = []
+                return
+            }
+
+            // a previous request is being processed
+            if (this.searchIsLoading) return
+            this.searchIsLoading = true
+
+            makeRequest("GET", `https://www.googleapis.com/books/v1/volumes?q=${query}&maxResults=30&orderBy=relevance`, {}, function (res) {
+                let books = JSON.parse(res.responseText).items
+                if (books) {
+                    let parsedBooks = []
+                    for (let i = 0; i < books.length; i++) {
+
+                        // get title
+                        let title = books[i].volumeInfo.title
+
+                        // get authors (if there is no author, it just doesn't return the field so return 'Unknown')
+                        // can be multiple authors
+                        let author = ""
+                        if (books[i].volumeInfo.authors) {
+                            let authors = books[i].volumeInfo.authors
+                            for (let i = 0; i < authors.length; i++) {
+                                author += authors[i]
+                                if (i < authors.length && i!=0) author += ", "
+                            }
+                        } else author = "Unknown"
+
+                        // get src link for the image (sometimes undefined, why google)
+                        let src = books[i].volumeInfo.imageLinks &&
+                            books[i].volumeInfo.imageLinks.thumbnail ? books[i].volumeInfo.imageLinks.thumbnail :
+                            "https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg"
+
+                        parsedBooks.push({
+                            title,
+                            author,
+                            src
+                        })
+                        this.bookResults = parsedBooks
+                    }
+                    this.searchIsLoading = false
+                }               
+            }.bind(this))
+
+
         }
     }
 })

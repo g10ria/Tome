@@ -1,3 +1,5 @@
 # Project
 
-todo: fix weird nav bug on journal page
+## Known bugs
+- autocomplete sometimes fills on empty input
+- nav has no padding on left side on Journal page

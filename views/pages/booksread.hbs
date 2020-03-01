@@ -55,6 +55,18 @@
                                     </v-btn>
                                 </v-flex>
 
+                                <v-flex xs6>
+
+                                    <v-autocomplete
+                                        v-model="model"
+                                        :items="searchItems"
+                                        :loading="searchIsLoading"
+                                        :search-input.sync="search" color="primary"
+                                        hide-no-data hide-selected item-text="titleandauthor" label="Search Books"
+                                        placeholder="Start typing to Search" prepend-icon="mdi-database-search" return-object></v-autocomplete>
+                                    
+                                </v-flex>
+
                                 {{!-- <v-flex xs12 class="pb-4 px-2">
                                     <v-btn block outline dark color="secondary" class="mb-2 mr-5" style="border-radius: 5px; height: 100%;" @click="openAddBook">
                                         <v-icon>add</v-icon>

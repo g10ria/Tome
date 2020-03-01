@@ -1,4 +1,3 @@
-
 new Vue({
     el: '#app',
     delimiters: ["%{", "}"],
@@ -72,6 +71,7 @@ new Vue({
         this.$vuetify.theme.secondary = '#F29E4C'
     },
     created: function () {
+        
     },
     mounted: function () {
         // add arrow key support
