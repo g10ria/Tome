@@ -33,4 +33,4 @@ export type BookshelfProps = {
 
 export type Bookshelf = mongoose.Document & BookshelfProps;
 
-export default mongoose.model<Bookshelf>("Bookclub", BookshelfSchema);
+export default mongoose.model<Bookshelf>("Bookshelf", BookshelfSchema);

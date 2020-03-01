@@ -6,3 +6,4 @@
 - yucky string/objectID casting :-(
 - there is basically zero error handling
 - target=_blank doesn't work for some reason (amazon links on dashboard)
+- autocomplete displays no results if you clear input and re-search without unfocusing element

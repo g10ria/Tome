@@ -6,9 +6,17 @@ const BookclubSchema = new db_1.default.Schema({
         type: String,
         required: true
     },
-    bookshelves: {
-        type: [String]
+    name: {
+        type: String,
+        required: true
     },
+    description: {
+        type: String,
+        required: true
+    },
+    bookshelves: [{
+            type: String
+        }],
     numMembers: {
         type: Number,
         default: 1

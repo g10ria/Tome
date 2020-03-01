@@ -23,5 +23,5 @@ const BookshelfSchema = new db_1.default.Schema({
         default: []
     }
 });
-exports.default = db_1.default.model("Bookclub", BookshelfSchema);
+exports.default = db_1.default.model("Bookshelf", BookshelfSchema);
 //# sourceMappingURL=bookshelf.js.map

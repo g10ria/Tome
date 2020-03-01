@@ -5,9 +5,17 @@ const BookclubSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    bookshelves: {
-        type: [String]
+    name: {
+        type: String,
+        required: true
     },
+    description: {
+        type: String,
+        required: true
+    },
+    bookshelves: [{
+        type: String
+    }],
     numMembers: {
         type: Number,
         default: 1
@@ -15,7 +23,9 @@ const BookclubSchema = new mongoose.Schema({
 });
 
 export type BookclubProps = {
-    fullName: String,
+    owner: String,
+    name: String,
+    description: String,
     bookshelves: String[],
     numMembers: Number
 };

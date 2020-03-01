@@ -39,9 +39,9 @@
 
                     <v-flex xs8>
                         <v-card class="ml-5 pa-4" style="border-radius: 5px; height: 40vh">
-                            <div class="grey--text text--lighten-1">%{niceDateWithTime(new Date(entries[openedEntry].date))}</div>
-                            <div class="headline">%{entries[openedEntry].name}</div>
-                            <div>%{entries[openedEntry].content}</div>
+                            <div class="grey--text text--lighten-1" v-if="entries.length!=0">%{niceDateWithTime(new Date(entries[openedEntry].date))}</div>
+                            <div class="headline" v-if="entries.length!=0">%{entries[openedEntry].name}</div>
+                            <div v-if="entries.length!=0">%{entries[openedEntry].content}</div>
                         </v-card>
                     </v-flex>
 

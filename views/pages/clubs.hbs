@@ -23,33 +23,76 @@
 
 
                             <v-divider></v-divider>
-                            <v-layout class="my-4" row wrap>
+                            <v-layout class="my-4" row wrap v-for="bookclub in bookclubs">
                                 <v-flex xs12 class="mb-2 pr-5">
-                                    <div class="lexend" style="font-weight: 600">Chinese Literature</div>
-                                    <div class="grey--text text--lighten-1">Owned by Gabriella Chang</div>
-                                    <div class="roboto">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Excepturi ratione deserunt repellendus. Voluptate debitis explicabo aut unde eos, illum exercitationem? Dolorum, suscipit recusandae illo mollitia dolore blanditiis necessitatibus quam vitae?</div>
+                                    <div class="lexend" style="font-weight: 600">%{bookclub.name}</div>
+                                    <div class="grey--text text--lighten-1">Owned by %{bookclub.owner}</div>
+                                    <div class="roboto">%{bookclub.description}</div>
                                 </v-flex>
                                 <v-flex xs12 class="mt-1">
-                                    <v-chip color="secondary" dark>Members: 15</v-chip>
-                                    <v-chip color="secondary" dark>Bookshelves: 3</v-chip>
-                                    <v-chip color="secondary" dark>Books: 14</v-chip>
+                                    <v-chip color="secondary" dark>Members: %{bookclub.numMembers}</v-chip>
+                                    <v-chip color="secondary" dark>Bookshelves: %{bookclub.bookshelves.length}</v-chip>
+                                    <v-chip color="secondary" dark>Books: %{bookclub.numBooks}</v-chip>
                                 </v-flex>
                                 <v-flex xs12 class="mt-2">
                                     <div>
                                         Bookshelves:
                                     </div>
-                                    <v-chip label>Li Bai's Poetry</v-chip>
-                                    <v-chip label>Han Dynasty Engravings</v-chip>
-                                    <v-chip label>Superhero Monkey</v-chip>
-                                    <v-chip label>I like noodles</v-chip>
+                                    <v-chip label v-for="bookshelf in bookclub.bookshelves">%{bookshelf}</v-chip>
+                                    <v-chip @click="" v-if="bookclub.isOwner"><v-icon style="cursor: pointer">add</v-icon></v-chip>
                                 </v-flex>
                             </v-layout>
 
                         </v-card>
                     </v-flex>
-                    <v-btn block color="secondary" outline class="mt-3">Add or Find a Book Club</v-btn>
+                    <v-btn block color="secondary" outline class="mt-3" @click="openAddClub">Add/Find a Book Club</v-btn>
                 </v-layout>
             </v-container>
+
+            <v-dialog v-model="dialogs.addClub" max-width="500" light persistent>
+                <v-card>
+            
+                    <v-toolbar color="secondary" dark dense>
+                        <v-toolbar-title class="lexend"> Add Book Club </v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-btn icon depressed flat @click="closeAddClub" color="white" class="condensed">
+                            <v-icon> close </v-icon>
+                        </v-btn>
+                    </v-toolbar>
+            
+                    <v-card-text>
+                        <v-form ref="addBookForm" class="pb-3 px-3">
+                            <v-autocomplete v-model="selectedClub" :items="clubResults" :loading="searchIsLoading"
+                                :search-input.sync="search" color="primary" hide-details item-text="name"
+                                label="Search for a book club" placeholder="Start typing to Search" prepend-icon="search"
+                                return-object class="mb-2"></v-autocomplete>
+                            
+                            <v-chip v-if="selectedClub!=null">Members: %{selectedClub.numMembers}</v-chip>
+                            <v-chip v-if="selectedClub!=null">Bookshelves: %{selectedClub.numBookshelves}</v-chip>
+            
+                            <br>
+                            <v-btn class="mt-4 ml-0" color="secondary" @click="submitAddClub">Add book club</v-btn>
+                        </v-form>
+                    </v-card-text>
+                </v-card>
+            </v-dialog>
+
+            {{!-- confirming close the add book dialog --}}
+            <v-dialog v-model="dialogs.confirmCloseAddClub" max-width="350" persistent>
+                <v-card>
+                    <v-card-text class="pa-4">Close without saving changes?</v-card-text>
+                    <v-container class="pt-0">
+                        <v-layout>
+                            <v-flex xs12>
+                                <v-btn v-on:click="confirmCloseAddClub" color="primary"
+                                    class="mr-0 absolute right bottom white--text roboto"> Close </v-btn>
+                                <v-btn v-on:click="closeCloseAddClub" depressed text class="mr-0 absolute right bottom roboto"> Go Back
+                                </v-btn>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                </v-card>
+            </v-dialog>
 
         </v-app>
     </div>

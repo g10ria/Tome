@@ -4,9 +4,10 @@ new Vue({
     data: {
         fullName: "Amelia Smith",
         dialogs: {
+            addClub: false,
+            confirmCloseAddClub: false
         },
-        info: {
-        },
+        bookclubs: [],
         snackbar: {
             success: false,
             error: false,
@@ -31,13 +32,21 @@ new Vue({
                 title: 'Romantic Poets Favorites <span class="grey--text text--lighten-1">Bookshelf</span>',
                 subtitle: "<span class='text--primary'>Delaney Scott</span> removed Newton by William Blake"
             }
-        ]
+        ],
+        descriptionLimit: 60,
+        clubResults: [],
+        searchIsLoading: false,
+        selectedClub: null,
+        search: null
     },
     beforeCreate: function () {
         this.$vuetify.theme.primary = '#048BA8';
         this.$vuetify.theme.secondary = '#F29E4C'
     },
     created: function () {
+        makeRequest("GET", "/user/bookclubs/all", {}, function(res) {
+            this.bookclubs = JSON.parse(res.responseText)
+        }.bind(this))
     },
     mounted: function () {
         // add arrow key support
@@ -63,6 +72,44 @@ new Vue({
         },
         niceDate: function (date) {
             return date.toString().substring(4, 15)
+        },
+        openAddClub: function() {
+            this.dialogs.addClub = true
+        },
+        submitAddClub: function() {
+            // todo: actually submit
+            // clean input
+            this.dialogs.addClub = false
+        },
+        closeAddClub: function() {
+            this.dialogs.confirmCloseAddClub = true
+        },
+        confirmCloseAddClub: function() {
+            this.dialogs.confirmCloseAddClub = false
+            this.dialogs.addClub = false;
+            // clean input
+        },
+        closeCloseAddClub: function() {
+            this.dialogs.confirmCloseAddClub = false
+        }
+    },
+    watch: {
+        search(query) {
+
+            if (!query || query.length == 0) { // empty query
+                this.clubResults = []
+                return
+            }
+
+            // a previous request is being processed
+            if (this.searchIsLoading) return
+            this.searchIsLoading = true
+
+            makeRequest("GET", `/user/bookclubs/search?query=${query}`, {}, function (res) {
+                this.clubResults = JSON.parse(res.responseText)
+                this.searchIsLoading = false
+                
+            }.bind(this))
         }
     }
 })
