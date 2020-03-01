@@ -39,9 +39,9 @@
 
                     <v-flex xs8>
                         <v-card class="ml-5 pa-4" style="border-radius: 5px; height: 40vh">
-                            <div class="grey--text text--lighten-1">Jan 1, 2020 3:30PM</div>
-                            <div class="headline">Ruminations on John Steinbeck</div>
-                            <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis enim, sed quaerat perferendis error quas, explicabo cum molestiae alias suscipit adipisci hic sint dolorem incidunt, quisquam magni rem ex maiores! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eos possimus doloremque incidunt repudiandae exercitationem nisi id. Neque voluptatibus architecto maiores? Pariatur, alias! Voluptates, tempora eius perspiciatis consequatur labore velit quas.</div>
+                            <div class="grey--text text--lighten-1">%{niceDateWithTime(new Date(entries[openedEntry].date))}</div>
+                            <div class="headline">%{entries[openedEntry].name}</div>
+                            <div>%{entries[openedEntry].content}</div>
                         </v-card>
                     </v-flex>
 

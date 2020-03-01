@@ -13,6 +13,7 @@ var app = new Vue({
             error: false,
             text: ""
         },
+        openedEntry: 0,
         entryName: "",
         entryContent: "",
         colorOptions: [{
@@ -75,6 +76,9 @@ var app = new Vue({
         niceDate: function (date) {
             return date.toString().substring(4, 15)
         },
+        niceDateWithTime: function(date) {
+            return date.toString().substring(0,21)
+        },
         submitJournal: function () {
             makeRequest("POST", "/user/journal", {
                 name: this.entryName,
@@ -94,7 +98,7 @@ var app = new Vue({
             }.bind(this))
         },
         openEntry: function(index) {
-            
+            this.openedEntry = index
         }
     }
 })
