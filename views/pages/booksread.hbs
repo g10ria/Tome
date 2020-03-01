@@ -57,13 +57,7 @@
 
                                 <v-flex xs6>
 
-                                    <v-autocomplete
-                                        v-model="model"
-                                        :items="searchItems"
-                                        :loading="searchIsLoading"
-                                        :search-input.sync="search" color="primary"
-                                        hide-no-data hide-selected item-text="titleandauthor" label="Search Books"
-                                        placeholder="Start typing to Search" prepend-icon="mdi-database-search" return-object></v-autocomplete>
+                                    
                                     
                                 </v-flex>
 
@@ -95,7 +89,14 @@
                     <v-card-text>
                         <v-form ref="addBookForm" class="pb-3 px-3">
                             {{!-- def needs to be autocomplete: --}}
-                            <v-text-field hide-details single-line v-model="bookName" label="Enter Book"></v-text-field>
+                            <v-autocomplete
+                                        v-model="selectedBook"
+                                        :items="searchItems"
+                                        :loading="searchIsLoading"
+                                        :search-input.sync="search" color="primary"
+                                        hide-details item-text="titleandauthor" label="Search for your book"
+                                        placeholder="Start typing to Search" prepend-icon="search" return-object class=""></v-autocomplete>
+
                             <v-select :items="bookshelves" v-model="selectedBookshelf" hide-details label="Select bookshelf to add book to" single-line></v-select>
                             <v-select :items="statuses" v-model="selectedStatus" single-line label="Select book status" hide-details>
                             </v-select>

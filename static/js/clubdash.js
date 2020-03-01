@@ -16,7 +16,7 @@ new Vue({
         },
         drawer: false,
         bookName: "",
-        bookISBN: -1,
+        bookGID: -1,
         bookSrc: "",
         bookAuthor: "",
         bookshelves: ["Chinese Culture Club"],
@@ -114,7 +114,7 @@ new Vue({
             this.selectedBookshelf = ""
             this.selectedStatus = ""
             this.bookName = ""
-            this.bookISBN = -1
+            this.bookGID = -1
             this.bookSrc = ""
             this.bookAuthor = ""
         },
@@ -134,7 +134,7 @@ new Vue({
             this.selectedBookshelf = ""
             this.selectedStatus = ""
             this.bookName = ""
-            this.bookISBN = -1
+            this.bookGID = -1
             this.bookSrc = ""
             this.bookAuthor = ""
         }

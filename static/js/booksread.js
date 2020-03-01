@@ -4,7 +4,7 @@ new Vue({
     data: {
         fullName: "Amelia Smith",
         dialogs: {
-            addBook: false,
+            addBook: true,
             addBookConfirmClose: false
         },
         info: {
@@ -16,7 +16,7 @@ new Vue({
         },
         drawer: false,
         bookName: "",
-        bookISBN: -1,
+        bookGID: -1,
         bookSrc: "",
         bookAuthor: "",
         bookshelves: ["Chinese Culture Club"],
@@ -35,7 +35,7 @@ new Vue({
         descriptionLimit: 60,
         bookResults: [],
         searchIsLoading: false,
-        model: null,
+        selectedBook: null,
         search: null
     },
     beforeCreate: function () {
@@ -48,8 +48,6 @@ new Vue({
     },
     computed: {
         searchItems() {
-            // console.log(this.bookResults)
-            // return this.bookResults
             return this.bookResults.map(entry => {
                 let titleandauthor = entry.title + " by " + entry.author
                 titleandauthor = titleandauthor.length > this.titleandauthorlimit
@@ -92,21 +90,27 @@ new Vue({
             // todo: add a book
             this.dialogs.addBook = false
 
+            // todo: make this not nasty
+            let book = this.bookResults.find(function(b) { return b.titleandauthor ==  this.selectedBook })
+
             if (this.selectedStatus == 'Finished reading') {
                 this.books.push({
-                    "title": this.bookName,
-                    "author": this.bookAuthor,
-                    "src": "https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg",
+                    "title": book.title,
+                    "author": book.author,
+                    "src": book.src,
                     "date": this.niceDate(new Date()), // needs fixing
                     "bookclub": this.selectedBookshelf
                 })
             }
             
-
+            // add book with book.id
+            
             this.selectedBookshelf = ""
             this.selectedStatus = ""
+            this.selectedBook = null
+
             this.bookName = ""
-            this.bookISBN = -1
+            this.bookGID = -1
             this.bookSrc = ""
             this.bookAuthor = ""
         },
@@ -131,7 +135,7 @@ new Vue({
             this.selectedBookshelf = ""
             this.selectedStatus = ""
             this.bookName = ""
-            this.bookISBN = -1
+            this.bookGID = -1
             this.bookSrc = ""
             this.bookAuthor = ""
         }
@@ -157,6 +161,8 @@ new Vue({
                         // get title
                         let title = books[i].volumeInfo.title
 
+                        let description = books[i].volumeInfo.description ? books[i].volumeInfo.description : "No description"
+
                         // get authors (if there is no author, it just doesn't return the field so return 'Unknown')
                         // can be multiple authors
                         let author = ""
@@ -173,13 +179,17 @@ new Vue({
                             books[i].volumeInfo.imageLinks.thumbnail ? books[i].volumeInfo.imageLinks.thumbnail :
                             "https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg"
 
+                        let id = books[i].id
+                        
                         parsedBooks.push({
                             title,
+                            description,
                             author,
-                            src
+                            src,
+                            id
                         })
-                        this.bookResults = parsedBooks
                     }
+                    this.bookResults = parsedBooks
                     this.searchIsLoading = false
                 }               
             }.bind(this))
