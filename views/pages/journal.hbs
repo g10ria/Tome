@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{> head}}
+    <script src="js/journal.js" defer></script>
+</head>
+
+<body>
+
+    <div id="app">
+        <v-app v-cloak>
+            {{> nav}}
+
+            <v-container class="mt-1 px-0 mb-4" fluid style="width: 95%;">
+                <v-layout wrap>
+
+                    {{!-- add search bar? --}}
+
+                    <v-flex xs4>
+                        <v-card style="border-radius: 5px; eight: 40vh;">
+                            <v-list class="pt-0" dense style="height: 40vh; overflow-y: scroll">
+                                <v-subheader>January 2020</v-subheader>
+                            
+                                <v-list-tile @click="" class="ma-0 pa-0" style="padding-left: 0 !important">
+                                    <div style="background-color: blue; height: 100%; width: 5px;"></div>
+                            
+                            
+                                    <v-list-tile-content class="ml-3">
+                                        <v-list-tile-title class="lexend">Ruminations on John Steinbeck</v-list-tile-title>
+                                        <span class="grey--text text--lighten-1">Jan 1</span>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+                            
+                                <v-list-tile @click="" class="ma-0 pa-0" style="padding-left: 0 !important">
+                                    <div style="background-color: blue; height: 100%; width: 5px;"></div>
+                            
+                            
+                                    <v-list-tile-content class="ml-3">
+                                        <v-list-tile-title class="lexend">I JUST FINISHED GIRL ON THE TRAIN</v-list-tile-title>
+                                        <span class="grey--text text--lighten-1">Jan 1</span>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+
+                                <v-list-tile @click="" class="ma-0 pa-0" style="padding-left: 0 !important">
+                                    <div style="background-color: blue; height: 100%; width: 5px;"></div>
+                                
+                                
+                                    <v-list-tile-content class="ml-3">
+                                        <v-list-tile-title class="lexend">I JUST FINISHED GIRL ON THE TRAIN</v-list-tile-title>
+                                        <span class="grey--text text--lighten-1">Jan 1</span>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+
+                                <v-list-tile @click="" class="ma-0 pa-0" style="padding-left: 0 !important">
+                                    <div style="background-color: blue; height: 100%; width: 5px;"></div>
+                                
+                                
+                                    <v-list-tile-content class="ml-3">
+                                        <v-list-tile-title class="lexend">I JUST FINISHED GIRL ON THE TRAIN</v-list-tile-title>
+                                        <span class="grey--text text--lighten-1">Jan 1</span>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+
+                                <v-list-tile @click="" class="ma-0 pa-0" style="padding-left: 0 !important">
+                                    <div style="background-color: blue; height: 100%; width: 5px;"></div>
+                                
+                                
+                                    <v-list-tile-content class="ml-3">
+                                        <v-list-tile-title class="lexend">I JUST FINISHED GIRL ON THE TRAIN</v-list-tile-title>
+                                        <span class="grey--text text--lighten-1">Jan 1</span>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+
+                                <v-list-tile @click="" class="ma-0 pa-0" style="padding-left: 0 !important">
+                                    <div style="background-color: blue; height: 100%; width: 5px;"></div>
+                                
+                                
+                                    <v-list-tile-content class="ml-3">
+                                        <v-list-tile-title class="lexend">I JUST FINISHED GIRL ON THE TRAIN</v-list-tile-title>
+                                        <span class="grey--text text--lighten-1">Jan 1</span>
+                                    </v-list-tile-content>
+                                </v-list-tile>
+                            
+                            </v-list>
+                        </v-card>
+                        
+                    </v-flex>
+
+                    <v-flex xs8>
+                        <v-card class="ml-5 pa-4" style="border-radius: 5px; height: 40vh">
+                            <div class="grey--text text--lighten-1">Jan 1, 2020 3:30PM</div>
+                            <div class="headline">Ruminations on John Steinbeck</div>
+                            <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facilis enim, sed quaerat perferendis error quas, explicabo cum molestiae alias suscipit adipisci hic sint dolorem incidunt, quisquam magni rem ex maiores! Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eos possimus doloremque incidunt repudiandae exercitationem nisi id. Neque voluptatibus architecto maiores? Pariatur, alias! Voluptates, tempora eius perspiciatis consequatur labore velit quas.</div>
+                        </v-card>
+                    </v-flex>
+
+                    <v-flex xs12 class="mt-4">
+                        <v-card class="pt-3 pb-4 px-4" style="border-radius: 5px">
+                            <div class="lexend mb-1 ml-3">
+                                Reading Journal 📓
+                            </div>
+                            <v-form>
+                                <v-layout class="mb-2">
+                                    <v-flex xs9 style="margin: auto" class="mr-4">
+                                        <v-text-field placeholder="Entry title" hide-details solo></v-text-field>
+                                    </v-flex>
+                                    <v-spacer></v-spacer>
+                                    <v-flex xs3>
+                                        <v-btn class="my-4" color="primary">Add entry</v-btn>
+                                    </v-flex>
+                                </v-layout>
+                        
+                                <v-textarea box hide-details placeholder='Record your thoughts'></v-textarea>
+                        
+                            </v-form>
+                        </v-card>
+                    </v-flex>
+
+                </v-layout>
+            </v-container>
+
+        </v-app>
+    </div>
+</body>
+
+<style>
+    a.v-list__tile {
+        padding-left: 0 !important;
+    }
+</style>
+</html>

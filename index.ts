@@ -8,8 +8,8 @@ import * as serve from 'koa-static'
 import * as session from 'koa-session'
 
 // import adminRouter from './routers/admin';
-// import studentRouter from './routers/student';
-// import authRouter from './routers/auth';
+import userRouter from './routers/user';
+import authRouter from './routers/auth';
 
 // import rejectAuth from './middleware/rejectAdmin'
 
@@ -23,11 +23,13 @@ const app = new Koa();
 const router = new Router<Koa.DefaultState, Koa.Context>();
 
 const sessionConfig: Partial<session.opts> = {
-    // key: config.auth.cookieKeys[0],
+    key: "thisisverysecure",
     maxAge: 1000 * 60 * 60 * 24 * 3 // 3 days
 }
+app.keys = [
+    "this","is","real","security"
+]
 
-// app.keys = config.auth.cookieKeys.slice(1);
 app.use(session(sessionConfig, app));
 app.use(json());
 app.use(logger());
@@ -44,15 +46,20 @@ registerSingularComponent('./views/partials/nav.hbs');
 
 console.log(__dirname+'/../views')
 router.get("/", async (ctx, next) => {
-    await ctx.render("pages/dash")
+    if (!ctx.session || !ctx.session.user) {
+        await ctx.render("pages/login")
+    } else {
+        await ctx.redirect("/user")
+    }
 });
 
 app.use(router.routes());
-// app.use(adminRouter.routes());
+app.use(userRouter.routes());
+app.use(authRouter.routes());
 
 app.use(serve('./static', {}))
 
-app.listen(3000, () => {
+app.listen(5000, () => {
     console.log("Server running on port 3000");
 });
 

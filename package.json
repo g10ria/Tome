@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/g10ria/Tome#readme",
   "dependencies": {
+    "@trevoreyre/autocomplete-vue": "^2.1.1",
     "@types/handlebars": "^4.1.0",
     "@types/joi": "^14.3.4",
     "@types/koa": "^2.11.0",
@@ -44,6 +45,7 @@
     "ldapjs": "^1.0.2",
     "moment": "^2.24.0",
     "mongoose": "^5.8.9",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "vue": "^2.6.11"
   }
 }

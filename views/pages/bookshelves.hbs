@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{> head}}
+    <script src="js/bookshelves.js" defer></script>
+</head>
+
+<body>
+
+    <div id="app">
+        <v-app v-cloak>
+            {{> nav}}
+
+            <v-container class="mt-1 px-0" fluid style="width: 95%;">
+                <v-layout wrap>
+
+                    <v-flex xs7 class="pr-2">
+                        <v-card class="pt-3 pb-4 px-4" style="border-radius: 5px">
+                            <div class="lexend mb-1 ml-3">
+                                Your Bookshelves 📓
+                            </div>
+                            <v-divider></v-divider>
+
+                            <v-layout class="my-4" row wrap>
+                                <v-flex xs7 class="mb-2 pr-5">
+                                    <span class="lexend" style="font-weight: 600">Productivity</span>
+                                    <span class="grey--text text--lighten-1"> created by the NY Times</span>
+                                    <div class="roboto">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quasi veritatis hic exercitationem
+                                        corrupti eum ipsa deserunt ab dignissimos nemo! A numquam id ipsa doloremque modi laboriosam voluptatibus,
+                                        aut repudiandae fugiat?</div>
+                                    <br>
+                                    <div style="color: #048BA8">
+                                        You've read 3 out of the 6 books on this bookshelf.
+                                    </div>
+                                </v-flex>
+                                <v-flex xs5>
+                                    
+                                    <v-layout row wrap>
+                                        <v-flex xs12>
+                                            <div class="lexend" style="font-weight: 600">You are currently reading</div>
+                                        </v-flex>
+                                        <v-flex xs6>
+                                            <img class="mt-2" src="https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg"
+                                                style="width: 90%; border-radius: 5px;">
+                                    
+                                        </v-flex>
+                                        <v-flex xs6 class="mt-2">
+                                            <div class="lexend">The Essex Serpent</div>
+                                            <div class="grey--text text--lighten-1">by Blake Lively</div>
+                                        </v-flex>
+                                    </v-layout>
+                                    
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout class="my-4" row wrap>
+                                <v-flex xs7 class="mb-2 pr-5">
+                                    <span class="lexend" style="font-weight: 600">Productivity</span>
+                                    <span class="grey--text text--lighten-1"> created by the NY Times</span>
+                                    <div class="roboto">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quasi veritatis hic exercitationem
+                                        corrupti eum ipsa deserunt ab dignissimos nemo! A numquam id ipsa doloremque modi laboriosam voluptatibus,
+                                        aut repudiandae fugiat?</div>
+                                    <br>
+                                    <div style="color: #048BA8">
+                                        You've read 3 out of the 6 books on this bookshelf.
+                                    </div>
+                                </v-flex>
+                                <v-flex xs5>
+                            
+                                    <v-layout row wrap>
+                                        <v-flex xs12>
+                                            <div class="lexend" style="font-weight: 600">You are currently reading</div>
+                                        </v-flex>
+                                        <v-flex xs6>
+                                            <img class="mt-2" src="https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg"
+                                                style="width: 90%; border-radius: 5px;">
+                            
+                                        </v-flex>
+                                        <v-flex xs6 class="mt-2">
+                                            <div class="lexend">The Essex Serpent</div>
+                                            <div class="grey--text text--lighten-1">by Blake Lively</div>
+                                        </v-flex>
+                                    </v-layout>
+                            
+                                </v-flex>
+                            </v-layout>
+
+                        </v-card>
+                    </v-flex>
+
+                    <v-flex xs5 class="pl-4">
+                        <v-card class="pt-3 pb-4 px-4" style="border-radius: 5px">
+
+                            {{!-- add autocomplete later lol --}}
+
+                            <div class="lexend mb-1 ml-3">
+                                Find Bookshelves
+                            </div>
+
+                            <v-divider></v-divider>
+                            
+                            <v-layout class="my-3">
+                                <v-flex xs3>
+                                    <img class="mt-2" src="https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg" style="width: 80%; border-radius: 5px;">
+                            
+                                </v-flex>
+                                <v-flex xs9>
+                                    <span class="lexend" style="font-weight: 600">Productivity (3)</span>
+                                    <span class="grey--text text--lighten-1"> created by the NY Times</span>
+                                    <div class="roboto">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quasi veritatis hic exercitationem corrupti eum ipsa deserunt ab dignissimos nemo! A numquam id ipsa doloremque modi laboriosam voluptatibus, aut repudiandae fugiat?</div>
+                                </v-flex>
+                            </v-layout>
+
+                            <v-layout class="my-3">
+                                <v-flex xs3>
+                                    <img class="mt-2" src="https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg"
+                                        style="width: 80%; border-radius: 5px;">
+                            
+                                </v-flex>
+                                <v-flex xs9>
+                                    <span class="lexend" style="font-weight: 600">Productivity</span>
+                                    <span class="grey--text text--lighten-1"> created by the NY Times</span>
+                                    <div class="roboto">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quasi veritatis hic exercitationem
+                                        corrupti eum ipsa deserunt ab dignissimos nemo! A numquam id ipsa doloremque modi laboriosam voluptatibus,
+                                        aut repudiandae fugiat?</div>
+                                </v-flex>
+                            </v-layout>
+
+
+                        </v-card>
+                    </v-flex>
+
+                </v-layout>
+            </v-container>
+
+        </v-app>
+    </div>
+</body>
+
+</html>

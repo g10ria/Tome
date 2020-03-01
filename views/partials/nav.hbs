@@ -3,7 +3,7 @@
         <v-icon>menu</v-icon>
     </v-btn>
     <v-toolbar-title class="Lexend">
-        TOME
+        Tome
     </v-toolbar-title>
     <v-spacer></v-spacer>
 
@@ -24,10 +24,11 @@
     <v-tooltip bottom open-delay="0" close-delay="0">
 
         <template v-slot:activator="{ on }">
-            <v-btn icon @click="" v-on="on">
+            <v-btn icon @click="logout" v-on="on">
                 <v-icon>exit_to_app</v-icon>
             </v-btn>
         </template>
+        
 
         <span>Logout</span>
 

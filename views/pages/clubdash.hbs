@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{> head}}
+    <script src="js/clubdash.js" defer></script>
+</head>
+
+<body>
+
+    <div id="app">
+        <v-app v-cloak>
+            {{> nav}}
+
+            <v-container class="mt-1 px-0" fluid style="width: 95%;">
+                <v-layout wrap>
+
+                    <v-flex xs12 class="pr-2">
+                        <v-card class="pt-3 pb-2 px-4" style="border-radius: 5px">
+                            <div class="lexend mb-1 ml-3">
+                                Books You've Read
+                            </div>
+                            <v-divider></v-divider>
+
+                            <v-layout class="my-4" row wrap>
+
+                                <v-flex xs3 class="mb-4 px-2" v-for="book in books">
+                                    <div>
+                                        <img class="mr-3" :src="book.src"
+                                            style="width: 40%; border-radius: 5px; float: left">
+                                        <div class="lexend" style="font-weight: 600">%{book.title}</div>
+                                        <div class="grey--text text--lighten-1 roboto mb-3">by %{book.author}</div>
+                                        <div style="display: inline-table">
+                                            <v-icon style="display: table-cell; vertical-align: middle">calendar_today
+                                            </v-icon>
+                                        </div>
+                                        <div style="display: inline-table">
+                                            <span
+                                                style="display: table-cell; vertical-align: middle">%{book.date}</span>
+                                        </div>
+
+                                        <br>
+
+                                        <div style="display: inline-table">
+                                            <v-icon style="display: table-cell; vertical-align: middle">
+                                                collections_bookmark</v-icon>
+                                        </div>
+                                        <div style="display: inline-table">
+                                            <span
+                                                style="display: table-cell; vertical-align: middle; text-overflow: ellipsis; overflow-x: hidden;white-space: nowrap; max-width: 100px">%{book.bookclub}</span>
+                                        </div>
+                                    </div>
+                                </v-flex>
+
+                                <v-flex xs3 class="pb-4 px-2">
+                                    <v-btn block outline dark color="secondary" class="mb-2 mr-5"
+                                        style="width: 40%; border-radius: 5px; height: 100%;" @click="openAddBook">
+                                        <v-icon>add</v-icon>
+                                    </v-btn>
+                                </v-flex>
+
+                                {{!-- <v-flex xs12 class="pb-4 px-2">
+                                    <v-btn block outline dark color="secondary" class="mb-2 mr-5" style="border-radius: 5px; height: 100%;" @click="openAddBook">
+                                        <v-icon>add</v-icon>
+                                    </v-btn>
+                                </v-flex> --}}
+
+                            </v-layout>
+
+                        </v-card>
+                    </v-flex>
+
+                </v-layout>
+            </v-container>
+
+            <v-dialog v-model="dialogs.addBook" max-width="600" light persistent>
+                <v-card>
+
+                    <v-toolbar color="secondary" dark dense>
+                        <v-toolbar-title class="lexend"> Add Book </v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-btn icon depressed flat @click="closeAddBook" color="white" class="condensed">
+                            <v-icon> close </v-icon>
+                        </v-btn>
+                    </v-toolbar>
+
+                    <v-card-text>
+                        <v-form ref="addBookForm" class="pb-3 px-3">
+                            {{!-- def needs to be autocomplete: --}}
+                            <v-text-field hide-details single-line v-model="bookName" label="Enter Book"></v-text-field>
+                            <v-select :items="bookshelves" v-model="selectedBookshelf" hide-details
+                                label="Select bookshelf to add book to" single-line></v-select>
+                            <v-select :items="statuses" v-model="selectedStatus" single-line label="Select book status"
+                                hide-details>
+                            </v-select>
+                            <v-btn class="mt-4 ml-0" color="secondary" @click="submitAddBook">Add book</v-btn>
+                        </v-form>
+                    </v-card-text>
+                </v-card>
+            </v-dialog>
+
+            {{!-- confirming close the add book dialog --}}
+            <v-dialog v-model="dialogs.addBookConfirmClose" max-width="350" persistent>
+                <v-card>
+                    <v-card-text class="pa-4">Close without saving changes?</v-card-text>
+                    <v-container class="pt-0">
+                        <v-layout>
+                            <v-flex xs12>
+                                <v-btn v-on:click="confirmConfirmAddBook" color="primary"
+                                    class="mr-0 absolute right bottom white--text roboto"> Close </v-btn>
+                                <v-btn v-on:click="closeConfirmAddBook" depressed text
+                                    class="mr-0 absolute right bottom roboto"> Go Back
+                                </v-btn>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                </v-card>
+            </v-dialog>
+
+        </v-app>
+    </div>
+</body>
+
+</html>

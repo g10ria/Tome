@@ -69,7 +69,7 @@ new Vue({
     },
     methods: {
         logout: function () {
-            makeRequest("POST", "../auth/logout", {}, function (res) {
+            makeRequest("POST", "/auth/logout", {}, function (res) {
                 location.reload()
             })
         }

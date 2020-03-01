@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+{{!-- stolen from volunteering --}}
+{{!-- credits to gloria --}}
+
+<head>
+    {{> head}}
+    <title>Tome</title>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <v-app>
+            <v-container fluid fill-height justify-center>
+                <v-flex xs12 sm6 md4 centered>
+
+                    <v-toolbar dark dense flat color="primary" class="mb-3">
+                        <v-spacer></v-spacer>
+                        <v-toolbar-title class="pt-sans headline" style="font-family: sans-serif"><span
+                                class="font-weight-bold">Tome Login</span>
+                        </v-toolbar-title>
+                        <v-spacer></v-spacer>
+                    </v-toolbar>
+
+                    <v-container id="loginForm">
+                        <v-text-field @keyup.enter="submit()" prepend-icon="person" id="username" label="Username"
+                            type="text" v-model="username">
+                        </v-text-field>
+                        <v-text-field @keyup.enter="submit()" prepend-icon="vpn_key" id="password" label="Password"
+                            type="password" v-model="password">
+                        </v-text-field>
+                    </v-container>
+                    <v-layout justify-center>
+                        <v-btn @click="submit()" color="secondary" depressed large>LOG IN</v-btn>
+                    </v-layout>
+                </v-flex>
+            </v-container>
+
+            <v-snackbar v-model="errorSnackbar" :timeout="4000" color="error">
+                <v-spacer></v-spacer>
+                {loginError}
+                <v-spacer></v-spacer>
+            </v-snackbar>
+            <v-snackbar v-model="successSnackbar" :timeout="4000" color="success">
+                <v-spacer></v-spacer>
+                {loginSuccess}
+                <v-spacer></v-spacer>
+            </v-snackbar>
+
+        </v-app>
+    </div>
+</body>
+
+</html>
+<script>
+    var app = new Vue({
+        el: '#app',
+        delimiters: ["{", "}"],
+        data: {
+            errorSnackbar: false,
+            successSnackbar: false,
+            loginError: '',
+            loginSuccess: '',
+            waitingForLoginResponse: false,
+            username: '',
+            password: ''
+        },
+        beforeCreate: function () {
+            this.$vuetify.theme.primary = '#048BA8';
+            this.$vuetify.theme.secondary = '#F29E4C'
+            this.$vuetify.theme.tertiary = '#F3C969'
+        },
+        methods: {
+            submit: function () {
+                let username = document.getElementById('username').value
+                let password = document.getElementById('password').value
+
+                let requestURL = `/auth`
+                try {
+                    this.waitingForLoginResponse = true;
+                    makeRequest('POST', requestURL, { username, password }, (res) => {
+                        if (res.status >= 200 && res.status < 300) {
+                            this.loginSuccess = res.responseText;
+
+                            this.successSnackbar = false;
+                            this.$nextTick(function () {
+                                this.successSnackbar = true;
+                            });
+
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 1000);
+                        } else {
+                            // bad status code, so something went wrong
+                            this.waitingForLoginResponse = false;
+
+                            this.loginError = res.responseText;
+                            if (res.status == 0) this.loginError = "Please check your internet connection."
+
+                            this.errorSnackbar = false;
+                            this.$nextTick(function () {
+                                this.errorSnackbar = true;
+                            });
+                            console.log('Bad request: ' + res.responseText)
+                        }
+                    })
+                } catch (e) {
+                    // if there is an error with sending the request, then stop the animation
+                    this.waitingForLoginResponse = false;
+
+                    this.loginError = "An error ocurred while logging in."
+                    this.errorSnackbar = true;
+                    console.log('An error occurred while logging in: ' + e)
+                }
+            }
+        }
+    })
+</script>

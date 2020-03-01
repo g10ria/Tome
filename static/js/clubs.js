@@ -1,4 +1,3 @@
-
 new Vue({
     el: '#app',
     delimiters: ["%{", "}"],
@@ -31,20 +30,6 @@ new Vue({
                 avatar: 'https://c8.alamy.com/comp/MMRJCY/english-blake-cant-pilgrims-detail-b-chaucer-coloured-engraving-2nd-state-1810-chaucers-canterbury-pilgrims-copper-engraving-with-additions-in-watercolor-by-the-artist-signature-and-imprint-painted-in-fresco-by-william-blake-by-him-engraved-published-october-8-1810-at-no-28-corner-of-broad-street-golden-square-inscribed-below-chaucers-canterbury-pilgrims-and-with-the-names-of-the-pilgrims-reeve-chaucer-clerk-of-oxenford-cook-miller-wife-of-bath-merchant-parson-man-of-law-plowman-physician-franklin-2-citizens-shipman-the-host-sompnour-manciple-pardoner-mon-MMRJCY.jpg',
                 title: 'Romantic Poets Favorites <span class="grey--text text--lighten-1">Bookshelf</span>',
                 subtitle: "<span class='text--primary'>Delaney Scott</span> removed Newton by William Blake"
-            }
-        ],
-        items: [
-            {
-                src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'
-            },
-            {
-                src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg'
-            },
-            {
-                src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg'
-            },
-            {
-                src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg'
             }
         ]
     },
