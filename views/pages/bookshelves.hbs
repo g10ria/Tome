@@ -22,23 +22,28 @@
                             </div>
                             <v-divider></v-divider>
 
-                            <v-layout class="my-4" row wrap v-for="shelf in bookshelves">
+                            <v-layout class="my-4" row wrap v-for="(shelf, index) in bookshelves" @click="openBookshelf(index)" style="cursor: pointer">
                                 <v-flex xs10 class="mb-2 pr-5">
                                     <span class="lexend" style="font-weight: 600">%{shelf.name}</span>
                                     <span class="grey--text text--lighten-1"> created by %{shelf.owner}</span>
                                     <div class="roboto">%{shelf.description}</div>
                                     <br>
                                     <div style="color: #048BA8">
-                                        You've read 3 out of the 6 books on this bookshelf.
+                                        %{shelf.stats}
                                     </div>
                                 </v-flex>
                                 <v-flex xs2>
                                     
-                                    <img class="mt-2" src="https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg"
+                                    <img class="mt-2" :src="`${shelf.src}`"
                                         style="width: 90%; border-radius: 5px;">
                                     
                                 </v-flex>
                             </v-layout>
+
+                            <v-btn block outline dark color="secondary" class="mb-2 mr-5" style="border-radius: 5px;"
+                                @click="openCreateBookshelf">
+                                <v-icon>add</v-icon>
+                            </v-btn>
 
                         </v-card>
                     </v-flex>
@@ -87,6 +92,73 @@
 
                 </v-layout>
             </v-container>
+
+            <v-dialog v-model="dialogs.bookshelf" max-width="750" light persistent>
+                <v-card>
+            
+                    <v-toolbar color="secondary" dark dense>
+                        <v-toolbar-title class="lexend"> %{bookshelves[selectedBookshelf].name} </v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-btn icon depressed flat @click="closeBookshelf" color="white" class="condensed">
+                            <v-icon> close </v-icon>
+                        </v-btn>
+                    </v-toolbar>
+            
+                    <v-card-text class="pb-3 mt-3">
+                        <v-layout row wrap>
+                            <v-flex xs4 class="mb-3 px-2" v-for="book in books">
+                                <div>
+                                    <img class="mr-3" :src="book.src" style="width: 40%; border-radius: 5px; float: left">
+                                    <div class="lexend" style="font-weight: 600">%{book.title}</div>
+                                    <div class="grey--text text--lighten-1 roboto mb-3">by %{book.author}</div>
+                                </div>
+                            </v-flex>
+                        </v-layout>
+                        
+                    </v-card-text>
+                </v-card>
+            </v-dialog>
+
+            <v-dialog v-model="dialogs.createBookshelf" max-width="600" light persistent>
+                <v-card>
+            
+                    <v-toolbar color="secondary" dark dense>
+                        <v-toolbar-title class="lexend"> Create new bookshelf </v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-btn icon depressed flat @click="closeCreateBookshelf" color="white" class="condensed">
+                            <v-icon> close </v-icon>
+                        </v-btn>
+                    </v-toolbar>
+            
+                    <v-card-text class="pb-4 mt-3 px-4">
+                        <v-form>
+                            <v-text-field v-model="create.name" placeholder="Bookshelf name" solo hide-details></v-text-field>
+                            <v-textarea v-model="create.description" placeholder="Enter a short description for your bookshelf" solo hide-details class="mt-4 mb-3"></v-textarea>
+                            <v-btn color="tertiary" dark>Create bookshelf</v-btn>
+                            {{!- add a picture --}}
+                        </v-form>
+            
+                    </v-card-text>
+                </v-card>
+            </v-dialog>
+
+            {{!-- confirming close the add book dialog --}}
+            <v-dialog v-model="dialogs.createBookshelfConfirmClose" max-width="350" persistent>
+                <v-card>
+                    <v-card-text class="pa-4">Close without saving changes?</v-card-text>
+                    <v-container class="pt-0">
+                        <v-layout>
+                            <v-flex xs12>
+                                <v-btn v-on:click="confirmConfirmCreateBookshelf" color="primary"
+                                    class="mr-0 absolute right bottom white--text roboto"> Close </v-btn>
+                                <v-btn v-on:click="closeConfirmCreateBookshelf" depressed text class="mr-0 absolute right bottom roboto"> Go
+                                    Back
+                                </v-btn>
+                            </v-flex>
+                        </v-layout>
+                    </v-container>
+                </v-card>
+            </v-dialog>
 
         </v-app>
     </div>

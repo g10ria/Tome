@@ -9,6 +9,13 @@ const TEST_USERS : UserProps[] = [
         "password": "secret",
         "email": "22gloriaz@students.harker.org",
         "pfp": "https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg"
+    },
+    {
+        "fullName": "The NY Times",
+        "username": "nytimes",
+        "password": "secret",
+        "email": "22gloriaz@students.harker.org",
+        "pfp": "https://upload.wikimedia.org/wikipedia/commons/4/40/New_York_Times_logo_variation.jpg"
     }
 ]
 

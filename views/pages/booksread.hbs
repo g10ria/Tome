@@ -24,6 +24,13 @@
 
                             <v-layout class="my-4" row wrap>
 
+                                <v-flex xs3 class="pb-4 px-2" v-if="statusCount('Currently reading')==0 && statusCount('Not started yet')==0 && statusCount('Finished reading')==0">
+                                    <v-btn block outline dark color="secondary" class="mb-2 mr-5" style="width: 40%; border-radius: 5px; height: 100%;"
+                                        @click="openAddBook">
+                                        <v-icon>add</v-icon>
+                                    </v-btn>
+                                </v-flex>
+
                                 <v-flex xs12 class="grey--text roboto mb-3 mx-3" style="text-decoration: underline" v-if="statusCount('Currently reading')!=0">Currently reading</v-flex>
                                 <v-flex xs3 class="mb-3 px-2" v-for="book in books" v-if="book.status=='Currently reading'">
                                     <div>

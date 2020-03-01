@@ -45,7 +45,8 @@ router.get("/bookshelves/all", async(ctx, next) => {
             name: shelf.name,
             description: shelf.description,
             src: shelf.src,
-            stats: "You've read 3 out of 6 books on this list" // todo: actually do this lol
+            bookGIDs: shelf.books,
+            stats: "You've finished 3 out of 6 books on this bookshelf." // todo: actually do this lol
         })
     }
     ctx.body = parsedShelves
