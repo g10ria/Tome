@@ -72,23 +72,46 @@ new Vue({
         this.$vuetify.theme.secondary = '#F29E4C'
     },
     created: function () {
-        const NYTIMES_API_KEY = "hJdiVknafC3lnKrYX8U4K0bDFQJOlDOU"
+        const API_KEYS = [ // so i don't get blocked for making too many requests lol
+            "3IvBe0sv6vpVtjBFxuHsbUdFz0eXMqWe",
+            "hJdiVknafC3lnKrYX8U4K0bDFQJOlDOU",
+            "CqN0vo8DeurRDyPoulx6eTVRL0kWVZoK",
+            "AQgeVSkmsWWeThzU3kuiaPUje8moPM8T"
+        ]
+        const NYTIMES_API_KEY = API_KEYS[(Math.random() * API_KEYS.length).toFixed(0)]
         const MAX_BOOKS = 3
         let parsedBooks = []
         makeRequest("GET", `https://api.nytimes.com/svc/books/v3/lists/current/hardcover-fiction.json?api-key=${NYTIMES_API_KEY}`, {}, function (res) {
             let data = JSON.parse(res.responseText)
-            let numBooks = data.num_results < MAX_BOOKS ? data.num_results : MAX_BOOKS
             let books = data.results.books
-            
-            for(let i =0;i<numBooks;i++) {
-                parsedBooks.push({
-                    title: books[i].title,
-                    author: books[i].author,
-                    src: books[i].book_image,
-                    description: books[i].description,
-                    href: books[i].amazon_product_url
-                })
+            if (data.num_results < MAX_BOOKS) {
+                for (let i = 0; i < data.num_results; i++) {
+                    parsedBooks.push({
+                        title: books[i].title,
+                        author: books[i].author,
+                        src: books[i].book_image,
+                        description: books[i].description,
+                        href: books[i].amazon_product_url
+                    })
+                }
+            } else {
+                let randoms = [] // randomly select MAX_BOOKS books from the list :p
+                for (let i=0;i<MAX_BOOKS;i++) {
+                    let rand = (Math.random() * (books.length)).toFixed(0)
+                    parsedBooks.push({
+                        title: books[rand].title,
+                        author: books[rand].author,
+                        src: books[rand].book_image,
+                        description: books[rand].description,
+                        href: books[rand].amazon_product_url
+                    })
+                    books.splice(rand, 1)
+                }
+                for (let i = 0; i < MAX_BOOKS; i++) {
+                    
+                }
             }
+            
         })
         this.pickedBooks = parsedBooks
     },
@@ -107,10 +130,7 @@ new Vue({
     },
     methods: {
         goto: function(link) {
-            let li = document.createElement("a")
-            li.href = link
-            li.target = "_blank"
-            li.click()
+            window.open(link, "_blank");
         },
         logout: function () {
             makeRequest("POST", "/auth/logout", {}, function (res) {
