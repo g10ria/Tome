@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "node build/index.js",
+        "build": "tsc",
         "populate": "node build/scripts/populateTestData.js",
         "wipe": "node build/scripts/wipeData.js"
     },

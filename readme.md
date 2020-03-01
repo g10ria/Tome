@@ -1,9 +1,13 @@
-# Project
+# Tome
+"Read more, with friends"
 
-## Known bugs/errors/bad stuff
-- autocomplete sometimes fills on empty input
-- nav has no padding on left side on Journal page
-- yucky string/objectID casting :-(
-- there is basically zero error handling
-- target=_blank doesn't work for some reason (amazon links on dashboard)
-- autocomplete displays no results if you clear input and re-search without unfocusing element
+## Running the Project
+1. `npm i`
+2. `npm run build`
+3. `npm run build`
+
+## Known Bugs
+- Autocompletes sometimes fills/doesn't fill
+- Nav drawer has no padding on left side on Journal page
+- No input sanitation
+- target=_blank not working for links
