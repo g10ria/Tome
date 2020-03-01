@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_1 = require("../models/user");
+const bookshelf_1 = require("../models/bookshelf");
 const TEST_USERS = [
     {
         "fullName": "Amelia Smith",
@@ -20,16 +21,22 @@ const TEST_BOOKSHELVES = [
     }
 ];
 async function populate() {
-    await user_1.default.insertMany(TEST_USERS, (err, docs) => {
-        if (err) {
-            console.log(err);
-            process.exit(-1);
-        }
-        else {
-            console.log("done populating");
-            process.exit(0);
-        }
+    // WIPE ALL THE DBS FIRST HAHHA
+    await user_1.default.deleteMany({});
+    await bookshelf_1.default.deleteMany({});
+    // await bookclub.deleteMany({})
+    let firstUser = (await user_1.default.insertMany(TEST_USERS))[0];
+    // setting the owner of the bookshelves to be the first populated user
+    for (let i = 0; i < TEST_BOOKSHELVES.length; i++) {
+        TEST_BOOKSHELVES[i].owner = firstUser.id;
+    }
+    let insertedBookshelves = (await bookshelf_1.default.insertMany(TEST_BOOKSHELVES)).map(shelf => {
+        return shelf.id;
     });
+    // updating the user's bookshelf list
+    await user_1.default.update({ _id: firstUser.id }, { $push: { bookshelves: { $each: insertedBookshelves } } });
+    console.log("successfully populated!");
+    process.exit(0);
 }
 populate();
 //# sourceMappingURL=populateTestData.js.map

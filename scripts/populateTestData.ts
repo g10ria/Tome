@@ -1,8 +1,8 @@
 import User, { UserProps } from '../models/user'
+import Bookshelf, { BookshelfProps } from '../models/bookshelf'
+import Bookclub, { BookclubProps } from '../models/bookclub';
 
-import mongoose from '../db';
-
-const TEST_USERS = [
+const TEST_USERS : UserProps[] = [
     {
         "fullName": "Amelia Smith",
         "username": "ameliam",
@@ -12,7 +12,7 @@ const TEST_USERS = [
     }
 ]
 
-const TEST_BOOKSHELVES = [
+const TEST_BOOKSHELVES : BookshelfProps[] = [
     {
         "owner": "",
         "name": "CS50 Extra Reading",
@@ -23,15 +23,29 @@ const TEST_BOOKSHELVES = [
 ]
 
 async function populate() {
-    await User.insertMany(TEST_USERS, (err, docs) => {
-        if (err) {
-            console.log(err)
-            process.exit(-1)
-        } else {
-            console.log("done populating")
-            process.exit(0);
-        }
+    // WIPE ALL THE DBS FIRST HAHHA
+    await User.deleteMany({})
+    await Bookshelf.deleteMany({})
+    // await bookclub.deleteMany({})
+
+    let firstUser = (await User.insertMany(TEST_USERS))[0]
+
+    // setting the owner of the bookshelves to be the first populated user
+    for(let i=0;i<TEST_BOOKSHELVES.length;i++) {
+        TEST_BOOKSHELVES[i].owner = firstUser.id
+    }
+    let insertedBookshelves = (await Bookshelf.insertMany(TEST_BOOKSHELVES)).map(shelf => {
+        return shelf.id
     })
+
+    // updating the user's bookshelf list
+    await User.update(
+        { _id: firstUser.id },
+        { $push: { bookshelves: { $each: insertedBookshelves } } }
+    )
+
+    console.log("successfully populated!")
+    process.exit(0)
 }
 
 populate()

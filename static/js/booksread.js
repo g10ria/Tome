@@ -19,7 +19,8 @@ new Vue({
         bookGID: -1,
         bookSrc: "",
         bookAuthor: "",
-        bookshelves: ["Chinese Culture Club"],
+        bookshelves: [],
+        bookshelfIDs: [],
         selectedBookshelf: "",
         statuses: ["Not read yet", "Currently reading", "Finished reading"],
         selectedStatus: "",
@@ -44,7 +45,11 @@ new Vue({
         this.$vuetify.theme.tertiary = '#F3C969'
     },
     created: function () {
-        
+        makeRequest("GET", '/user/bookshelves/names', {}, function(res) {
+            let data = JSON.parse(res.responseText)
+            this.bookshelves = data.names
+            this.bookshelfIDs = data.ids
+        }.bind(this))
     },
     computed: {
         searchItems() {
@@ -85,13 +90,18 @@ new Vue({
         },
         openAddBook: function() {
             this.dialogs.addBook = true
+            // request for user's bookshelves
         },
         submitAddBook: function() {
-            // todo: add a book
             this.dialogs.addBook = false
 
             // todo: make this not nasty
+            // getting the book and the id of the selected bookshelf
             let book = this.bookResults.find(function(b) { return b.titleandauthor ==  this.selectedBook })
+            let bookshelfID
+            for(let i=0;i<this.bookshelves.length;i++) {
+                if (this.bookshelves[i]==this.selectedBookshelf) bookshelfID = this.bookshelfIDs[i]
+            }
 
             if (this.selectedStatus == 'Finished reading') {
                 this.books.push({
@@ -103,7 +113,14 @@ new Vue({
                 })
             }
             
-            // add book with book.id
+            // todo: error/success messages
+            makeRequest("POST", "/user/book/addnew", {
+                bookshelfID,
+                status: this.selectedStatus,
+                bookID: this.selectedBook.id
+            }, function(res) {
+                console.log(res.responseText)
+            }.bind(this))
             
             this.selectedBookshelf = ""
             this.selectedStatus = ""

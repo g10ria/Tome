@@ -1,6 +1,5 @@
 import mongoose from '../db';
 
-
 const UserSchema = new mongoose.Schema({
     fullName: {
         type: String,
@@ -34,7 +33,7 @@ const UserSchema = new mongoose.Schema({
             type: Number
         },
         status: {
-            type: Number
+            type: String
         },
         reflection: {
             type: String
@@ -65,18 +64,19 @@ const UserSchema = new mongoose.Schema({
 
 export type UserProps = {
     fullName: String,
+    username: String,
     password: String,
     email: String,
     pfp: String,
-    bookshelves: String[],
-    books: {
+    bookshelves?: String[],
+    books?: {
         bookshelf: String,
         index: Number,
-        status: Number,
+        status: String,
         reflection: String
     }[],
-    bookclubs: String[],
-    journalentries: {
+    bookclubs?: String[],
+    journalentries?: {
         name: String,
         content: String,
         date: String,

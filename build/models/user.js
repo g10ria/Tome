@@ -34,7 +34,7 @@ const UserSchema = new db_1.default.Schema({
                 type: Number
             },
             status: {
-                type: Number
+                type: String
             },
             reflection: {
                 type: String

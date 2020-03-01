@@ -19,7 +19,8 @@ const BookshelfSchema = new db_1.default.Schema({
         default: "https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg"
     },
     books: {
-        type: [String]
+        type: [String],
+        default: []
     }
 });
 exports.default = db_1.default.model("Bookclub", BookshelfSchema);
