@@ -2,42 +2,22 @@ new Vue({
     el: '#app',
     delimiters: ["%{", "}"],
     data: {
-        fullName: "Amelia Smith",
+        fullName: "",
+        src: "",
         dialogs: {
             addClub: false,
-            confirmCloseAddClub: false
+            confirmCloseAddClub: false,
+            createClub: false
         },
         bookclubs: [],
-        snackbar: {
-            success: false,
-            error: false,
-            text: ""
-        },
         drawer: false,
-        feedItems: [
-            {
-                avatar: 'https://www.topchinatravel.com/pic/city/chongqing/attrations/The-People-Square-3.jpg',
-                title: 'Chinese Literature <span class="grey--text text--lighten-1">Club</span>',
-                subtitle: "<span class='text--primary'>Joanna Chuang</span> added bookshelf: 1300s Han Lit."
-            },
-            { divider: true, inset: true },
-            {
-                avatar: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
-                title: 'CS50 Extra Reading <span class="grey--text text--lighten-1">Bookshelf</span>',
-                subtitle: "<span class='text--primary'>Prof. Adler</span> added You Don't Know JS: Scopes and Closures by Kyle Simpson"
-            },
-            { divider: true, inset: true },
-            {
-                avatar: 'https://c8.alamy.com/comp/MMRJCY/english-blake-cant-pilgrims-detail-b-chaucer-coloured-engraving-2nd-state-1810-chaucers-canterbury-pilgrims-copper-engraving-with-additions-in-watercolor-by-the-artist-signature-and-imprint-painted-in-fresco-by-william-blake-by-him-engraved-published-october-8-1810-at-no-28-corner-of-broad-street-golden-square-inscribed-below-chaucers-canterbury-pilgrims-and-with-the-names-of-the-pilgrims-reeve-chaucer-clerk-of-oxenford-cook-miller-wife-of-bath-merchant-parson-man-of-law-plowman-physician-franklin-2-citizens-shipman-the-host-sompnour-manciple-pardoner-mon-MMRJCY.jpg',
-                title: 'Romantic Poets Favorites <span class="grey--text text--lighten-1">Bookshelf</span>',
-                subtitle: "<span class='text--primary'>Delaney Scott</span> removed Newton by William Blake"
-            }
-        ],
         descriptionLimit: 60,
         clubResults: [],
         searchIsLoading: false,
         selectedClub: null,
-        search: null
+        search: null,
+        createClubName: "",
+        createClubDescription: ""
     },
     beforeCreate: function () {
         this.$vuetify.theme.primary = '#048BA8';
@@ -45,7 +25,13 @@ new Vue({
     },
     created: function () {
         makeRequest("GET", "/user/bookclubs/all", {}, function(res) {
+            console.log(JSON.parse(res.responseText))
             this.bookclubs = JSON.parse(res.responseText)
+        }.bind(this))
+        makeRequest("GET", '/user/info', {}, function (res) {
+            let body = JSON.parse(res.responseText)
+            this.fullName = body.fullName
+            this.src = body.src
         }.bind(this))
     },
     methods: {
@@ -59,6 +45,31 @@ new Vue({
         },
         niceDate: function (date) {
             return date.toString().substring(4, 15)
+        },
+        openCreateClub: function() {
+            this.dialogs.createClub = true
+        },
+        closeCreateClub: function() {
+            this.dialogs.createClub = false
+        },
+        submitCreateClub: function() {
+            makeRequest("POST", "/user/bookclubs/createnew", {
+                name: this.createClubName,
+                description: this.createClubDescription
+            }, function(res) {
+                this.bookclubs.push({
+                    owner: this.fullName,
+                    name: this.createClubName,
+                    description: this.createClubDescription,
+                    bookshelves: [],
+                    numMembers: 1,
+                    numBooks: 0,
+                    isOwner: true
+                })
+                this.createClubName = ""
+                this.createClubDescription = ""
+            }.bind(this))
+            this.dialogs.createClub = false
         },
         openAddClub: function() {
             this.dialogs.addClub = true

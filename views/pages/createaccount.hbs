@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+{{!-- stolen from volunteering --}}
+{{!-- credits to gloria --}}
+
+<head>
+    {{> head}}
+    <title>Tome</title>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <v-app>
+            <v-container fluid fill-height justify-center>
+                <v-flex xs12 sm6 md4 centered>
+
+                    <v-toolbar dark dense flat color="primary" class="mb-3">
+                        <v-spacer></v-spacer>
+                        <v-toolbar-title class="pt-sans headline" style="font-family: sans-serif"><span
+                                class="font-weight-bold">Tome Account Creation</span>
+                        </v-toolbar-title>
+                        <v-spacer></v-spacer>
+                    </v-toolbar>
+
+                    <v-container id="loginForm">
+                        <v-text-field @keyup.enter="submit()" prepend-icon="short_text" id="fullName" label="Full Name" type="text"
+                            v-model="fullName">
+                        </v-text-field>
+                        <v-text-field @keyup.enter="submit()" prepend-icon="person" id="username" label="Username"
+                            type="text" v-model="username">
+                        </v-text-field>
+                        <v-text-field @keyup.enter="submit()" prepend-icon="vpn_key" id="password" label="Password"
+                            type="password" v-model="password">
+                        </v-text-field>
+                        <v-text-field @keyup.enter="submit()" prepend-icon="mail" id="email" label="Email" type="text"
+                            v-model="email">
+                        </v-text-field>
+                    </v-container>
+                    <v-layout justify-center>
+                        <v-btn @click="submit()" color="secondary" depressed large>Create Account</v-btn>
+                    </v-layout>
+                    <div style="text-align: center" class="lexend">Have an account? <span style="text-decoration: underline; cursor: pointer" @click='goto("/login")'>Log in</span></div>
+                </v-flex>
+            </v-container>
+
+        </v-app>
+    </div>
+</body>
+
+</html>
+<script>
+    var app = new Vue({
+        el: '#app',
+        delimiters: ["{", "}"],
+        data: {
+            fullName: '',
+            username: '',
+            password: '',
+            email: ''
+        },
+        beforeCreate: function () {
+            this.$vuetify.theme.primary = '#048BA8';
+            this.$vuetify.theme.secondary = '#F29E4C'
+        },
+        methods: {
+            submit: function () {
+                let fullName = this.fullName
+                let username = this.username
+                let password = this.password
+                let email = this.email
+                let pfp = "https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg" // hardcoded
+
+                makeRequest('POST', "/createnew", { fullName, username, password, email, pfp }, (res) => {
+                    window.location.href = "/"
+                })
+            },
+            goto: function(link) {
+                window.location.href = link
+            }
+        }
+    })
+</script>

@@ -2,17 +2,11 @@ new Vue({
     el: '#app',
     delimiters: ["%{", "}"],
     data: {
-        fullName: "Amelia Smith",
+        fullName: "",
+        src: "",
         dialogs: {
             addBook: false,
             addBookConfirmClose: false
-        },
-        info: {
-        },
-        snackbar: {
-            success: false,
-            error: false,
-            text: ""
         },
         drawer: false,
         bookName: "",
@@ -67,19 +61,11 @@ new Vue({
         this.$vuetify.theme.tertiary = '#F3C969'
     },
     created: function () {
-    },
-    mounted: function () {
-        // add arrow key support
-        window.addEventListener("keydown", function (e) {
-
-            // if (e.keyCode == 39)        // right arrow key
-            //     this.incrementCalendarDate()
-            // else if (e.keyCode == 37)   // left arrow key
-            //     this.decrementCalendarDate()
-            // else if (e.keyCode == 84)   // 't' character
-            //     this.resetToToday()
-
-        }.bind(this));
+        makeRequest("GET", '/user/info', {}, function (res) {
+            let body = JSON.parse(res.responseText)
+            this.fullName = body.fullName
+            this.src = body.src
+        }.bind(this))
     },
     methods: {
         logout: function () {

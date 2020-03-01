@@ -7,6 +7,8 @@ import * as bodyParser from "koa-bodyparser"
 import * as serve from 'koa-static'
 import * as session from 'koa-session'
 
+import User from './models/user'
+
 // import adminRouter from './routers/admin';
 import userRouter from './routers/user';
 import authRouter from './routers/auth';
@@ -27,7 +29,7 @@ const sessionConfig: Partial<session.opts> = {
     maxAge: 1000 * 60 * 60 * 24 * 3 // 3 days
 }
 app.keys = [
-    "this","is","real","security"
+    "this", "is", "real", "security"
 ]
 
 app.use(session(sessionConfig, app));
@@ -44,12 +46,25 @@ app.use(views(__dirname + '/../views', {
 registerSingularComponent('./views/partials/head.hbs');
 registerSingularComponent('./views/partials/nav.hbs');
 
+router.get("/signup", async (ctx, next) => {
+    if (!ctx.session || !ctx.session.username) {
+        await ctx.render("pages/createaccount")
+    } else {
+        await ctx.redirect("/user")
+
+    }});
 router.get("/login", async (ctx, next) => {
     if (!ctx.session || !ctx.session.username) {
         await ctx.render("pages/login")
     } else {
         await ctx.redirect("/user")
 
+    }})
+router.post("/createnew", async (ctx, next) => {
+    let body = ctx.request.body
+    let user = await User.create([body])
+    ctx.session.username = body.username
+    ctx.body = user
 })
 router.get("/", async (ctx, next) => {
     if (!ctx.session || !ctx.session.username) {

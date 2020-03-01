@@ -15,7 +15,7 @@
             <v-container class="mt-1 px-0" fluid style="width: 95%;">
                 <v-layout wrap>
 
-                    <v-flex xs7 class="pr-2">
+                    <v-flex xs12 class="pr-2">
                         <v-card class="pt-3 pb-4 px-4" style="border-radius: 5px">
                             <div class="lexend mb-1 ml-3">
                                 Your Bookshelves 📓
@@ -23,7 +23,7 @@
                             <v-divider></v-divider>
 
                             <v-layout class="my-4" row wrap v-for="(shelf, index) in bookshelves" @click="openBookshelf(index)" style="cursor: pointer">
-                                <v-flex xs10 class="mb-2 pr-5">
+                                <v-flex xs11 class="mb-2 pr-5">
                                     <span class="lexend" style="font-weight: 600">%{shelf.name}</span>
                                     <span class="grey--text text--lighten-1"> created by %{shelf.owner}</span>
                                     <div class="roboto">%{shelf.description}</div>
@@ -31,12 +31,6 @@
                                     {{!-- <div style="color: #048BA8">
                                         %{shelf.stats}
                                     </div> --}}
-                                </v-flex>
-                                <v-flex xs2>
-                                    
-                                    <img class="mt-2" :src="`${shelf.src}`"
-                                        style="width: 90%; border-radius: 5px;">
-                                    
                                 </v-flex>
                             </v-layout>
 
@@ -48,13 +42,11 @@
                         </v-card>
                     </v-flex>
 
-                    <v-flex xs5 class="pl-4">
+                    {{!-- <v-flex xs5 class="pl-4">
                         <v-card class="pt-3 pb-4 px-4" style="border-radius: 5px">
 
-                            {{!-- add autocomplete later lol --}}
-
                             <div class="lexend mb-1 ml-3">
-                                Find Bookshelves
+                                Explore Bookshelves
                             </div>
 
                             <v-divider></v-divider>
@@ -65,7 +57,7 @@
                             
                                 </v-flex>
                                 <v-flex xs9>
-                                    <span class="lexend" style="font-weight: 600">Productivity (3)</span>
+                                    <span class="lexend" style="font-weight: 600">Productivity</span>
                                     <span class="grey--text text--lighten-1"> created by the NY Times</span>
                                     <div class="roboto">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quasi veritatis hic exercitationem corrupti eum ipsa deserunt ab dignissimos nemo! A numquam id ipsa doloremque modi laboriosam voluptatibus, aut repudiandae fugiat?</div>
                                 </v-flex>
@@ -88,7 +80,7 @@
 
 
                         </v-card>
-                    </v-flex>
+                    </v-flex> --}}
 
                 </v-layout>
             </v-container>

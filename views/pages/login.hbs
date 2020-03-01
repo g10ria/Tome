@@ -34,6 +34,7 @@
                     <v-layout justify-center>
                         <v-btn @click="submit()" color="secondary" depressed large>LOG IN</v-btn>
                     </v-layout>
+                    <div style="text-align: center" class="lexend"><span style="text-decoration: underline; cursor: pointer" @click='goto("/signup")'>Create account</span></div>
                 </v-flex>
             </v-container>
 
@@ -72,14 +73,15 @@
             this.$vuetify.theme.tertiary = '#F3C969'
         },
         methods: {
+            goto: function (link) {
+                window.location.href = link
+            },
             submit: function () {
                 let username = document.getElementById('username').value
                 let password = document.getElementById('password').value
-
-                let requestURL = `/auth`
                 try {
                     this.waitingForLoginResponse = true;
-                    makeRequest('POST', requestURL, { username, password }, (res) => {
+                    makeRequest('POST', "/auth", { username, password }, (res) => {
                         if (res.status >= 200 && res.status < 300) {
                             this.loginSuccess = res.responseText;
 

@@ -19,6 +19,29 @@ router.get("/", async (ctx, next) => {
     await ctx.render("pages/clubs")
 });
 
+router.post("/createnew", async(ctx,next) => {
+    let user = await userFromUsername(ctx.session.username)
+    let owner = user.id
+    let body = ctx.request.body
+    let name = body.name
+    let description = body.description
+    let bookshelves = []
+    let numMembers = 1
+
+    let inserted = (await Bookclub.insertMany([{
+        owner,
+        name,
+        description,
+        bookshelves,
+        numMembers
+    }]))[0]
+
+    await User.updateOne({_id:user.id}, { $push: { bookclubs: inserted.id } })
+
+    console.log(inserted)
+    ctx.body = inserted
+})
+
 router.post("/join", async (ctx, next) => {
     let user = await userFromUsername(ctx.session.username)
     let clubID = ctx.request.body.id

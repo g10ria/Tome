@@ -2,17 +2,11 @@ new Vue({
     el: '#app',
     delimiters: ["%{", "}"],
     data: {
-        fullName: "Amelia Smith",
+        fullName: "",
+        src: "",
         dialogs: {
             addBook: false,
             addBookConfirmClose: false
-        },
-        info: {
-        },
-        snackbar: {
-            success: false,
-            error: false,
-            text: ""
         },
         drawer: false,
         bookName: "",
@@ -38,6 +32,11 @@ new Vue({
         this.$vuetify.theme.tertiary = '#F3C969'
     },
     created: function () {
+        makeRequest("GET", '/user/info', {}, function (res) {
+            let body = JSON.parse(res.responseText)
+            this.fullName = body.fullName
+            this.src = body.src
+        }.bind(this))
         makeRequest("GET", '/user/bookshelves/names', {}, function(res) {
             let data = JSON.parse(res.responseText)
             this.bookshelves = data.names
@@ -189,7 +188,7 @@ new Vue({
             // get src link for the image (sometimes undefined, why google)
             let src = rawData.volumeInfo.imageLinks &&
                 rawData.volumeInfo.imageLinks.thumbnail ? rawData.volumeInfo.imageLinks.thumbnail :
-                "https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg"
+                "https://content.etilize.com/Finish/1031247865.jpg"
 
             let id = rawData.id
 

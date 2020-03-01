@@ -2,24 +2,12 @@
     <v-btn icon @click.stop="drawer = !drawer">
         <v-icon>menu</v-icon>
     </v-btn>
-    <v-toolbar-title class="Lexend">
+    <v-toolbar-title class="Lexend" style="cursor: pointer" @click="goto('/user')">
         Tome
     </v-toolbar-title>
     <v-spacer></v-spacer>
 
     <v-divider vertical inset></v-divider>
-
-    <v-tooltip bottom open-delay="0" close-delay="0">
-
-        <template v-slot:activator="{ on }">
-            <v-btn icon v-on="on">
-                <v-icon>live_help</v-icon>
-            </v-btn>
-        </template>        
-
-        <span>Info</span>
-
-    </v-tooltip>
 
     <v-tooltip bottom open-delay="0" close-delay="0">
 
@@ -39,7 +27,7 @@
     <v-list class="pa-1 pl-2">
         <v-list-tile avatar>
             <v-list-tile-avatar>
-                <img src="https://previews.123rf.com/images/ammentorp/ammentorp1704/ammentorp170400278/77014947-square-portrait-of-young-woman-with-sunglasses-against-beige-background-caucasian-female-fashion-mod.jpg">
+                <img :src="`${src}`">
             </v-list-tile-avatar>
 
             <v-list-tile-content>
@@ -97,7 +85,7 @@
             </v-list-tile-action>
         
             <v-list-tile-content>
-                <v-list-tile-title>Book history</v-list-tile-title>
+                <v-list-tile-title>Books</v-list-tile-title>
             </v-list-tile-content>
         </v-list-tile>
 

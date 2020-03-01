@@ -3,7 +3,8 @@ var app = new Vue({
     el: '#app',
     delimiters: ["%{", "}"],
     data: {
-        fullName: "Amelia Smith",
+        fullName: "",
+        src: "",
         dialogs: {
         },
         info: {
@@ -41,25 +42,16 @@ var app = new Vue({
         this.$vuetify.theme.secondary = '#F29E4C'
     },
     created: function () {
-
+        makeRequest("GET", '/user/info', {}, function (res) {
+            let body = JSON.parse(res.responseText)
+            this.fullName = body.fullName
+            this.src = body.src
+        }.bind(this))
         // fetch journal entries
         makeRequest("GET", "/user/journalentries", {}, function(res) {
             this.entries = JSON.parse(res.responseText)
         }.bind(this))
 
-    },
-    mounted: function () {
-        // add arrow key support
-        window.addEventListener("keydown", function (e) {
-
-            // if (e.keyCode == 39)        // right arrow key
-            //     this.incrementCalendarDate()
-            // else if (e.keyCode == 37)   // left arrow key
-            //     this.decrementCalendarDate()
-            // else if (e.keyCode == 84)   // 't' character
-            //     this.resetToToday()
-
-        }.bind(this));
     },
     methods: {
         logout: function () {

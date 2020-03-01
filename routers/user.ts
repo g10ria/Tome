@@ -26,6 +26,14 @@ router.get("/", async (ctx, next) => {
     await ctx.render("pages/dash");
 });
 
+router.get("/info", async (ctx, next) => {
+    let user = await userFromUsername(ctx.session.username)
+    ctx.body = {
+        fullName: user.fullName,
+        src: user.pfp
+    }
+})
+
 router.post("/book/addnew", async (ctx, next) => {
     let body = ctx.request.body
 
@@ -89,18 +97,6 @@ router.post("/journal", async (ctx, next) => {
     )
     ctx.body = body
 })
-
-// router.get(
-//     "/dropins",
-//     async (ctx, next) => {
-//         const objectId = ctx.request.query.id;
-//         const dropin = await Dropin.find({ _id: objectId });
-//         if (!dropin) {
-//             ctx.throw(404, 'Dropin with specified id was not found.');
-//         }
-//         ctx.body = dropin;
-//     }
-// );
 
 
 export default router;

@@ -7,8 +7,6 @@ new Vue({
         this.$vuetify.theme.primary = '#048BA8';
         this.$vuetify.theme.secondary = '#F29E4C'
     },
-    created: function () {
-    },
     methods: {
         goto: function (url) {
             window.location.href = url

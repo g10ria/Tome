@@ -2,11 +2,8 @@ new Vue({
     el: '#app',
     delimiters: ["%{", "}"],
     data: {
-        fullName: "Amelia Smith",
-        dialogs: {
-        },
-        info: {
-        },
+        fullName: "",
+        src: "",
         colorOptions: [{
             name: "Apricot",
             hex: "F29E4C"
@@ -26,11 +23,6 @@ new Vue({
         entryName: "",
         entryContent: "",
         selectedColor: 0,
-        snackbar: {
-            success: false,
-            error: false,
-            text: ""
-        },
         drawer: false,
         feedItems: [
             {
@@ -51,20 +43,6 @@ new Vue({
                 subtitle: "<span class='text--primary'>Delaney Scott</span> removed Newton by William Blake"
             }
         ],
-        items: [
-            {
-                src: 'https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg'
-            },
-            {
-                src: 'https://cdn.vuetifyjs.com/images/carousel/sky.jpg'
-            },
-            {
-                src: 'https://cdn.vuetifyjs.com/images/carousel/bird.jpg'
-            },
-            {
-                src: 'https://cdn.vuetifyjs.com/images/carousel/planet.jpg'
-            }
-        ],
         pickedBooks: []
     },
     beforeCreate: function () {
@@ -72,6 +50,11 @@ new Vue({
         this.$vuetify.theme.secondary = '#F29E4C'
     },
     created: function () {
+        makeRequest("GET", '/user/info', {}, function (res) {
+            let body = JSON.parse(res.responseText)
+            this.fullName = body.fullName
+            this.src = body.src
+        }.bind(this))
         const API_KEYS = [ // so i don't get blocked for making too many requests lol
             "3IvBe0sv6vpVtjBFxuHsbUdFz0eXMqWe",
             "hJdiVknafC3lnKrYX8U4K0bDFQJOlDOU",
