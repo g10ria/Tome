@@ -4,7 +4,6 @@ const Router = require("koa-router");
 const user_1 = require("../models/user");
 const bookshelf_1 = require("../models/bookshelf");
 const requireAuth_1 = require("../middleware/requireAuth");
-// import user from "../models/user";
 const userHelpers_1 = require("../helpers/userHelpers");
 const bookshelfHelpers_1 = require("../helpers/bookshelfHelpers");
 const mongodb_1 = require("mongodb");
@@ -16,6 +15,27 @@ router.get("/", async (ctx, next) => {
 });
 router.get("/bookshelves", async (ctx, next) => {
     await ctx.render("pages/bookshelves");
+});
+router.post("/bookshelves/createnew", async (ctx, next) => {
+    let body = ctx.request.body;
+    let user = await userHelpers_1.userFromUsername(ctx.session.username);
+    let bookshelf = new bookshelf_1.default({
+        owner: user.id,
+        name: body.name,
+        description: body.description,
+        src: body.src,
+        books: []
+    });
+    await bookshelf.save();
+    await user_1.default.update({ _id: user.id }, { $push: { bookshelves: bookshelf.id } });
+    ctx.body = {
+        owner: user.fullName,
+        name: bookshelf.name,
+        description: bookshelf.description,
+        src: bookshelf.src,
+        bookGIDs: bookshelf.books,
+        stats: "You've finished 3 out of 6 books on this bookshelf." // todo: actually do this lol
+    };
 });
 router.get("/bookshelves/all", async (ctx, next) => {
     let user = await userHelpers_1.userFromUsername(ctx.session.username);

@@ -5,7 +5,7 @@ new Vue({
         fullName: "Amelia Smith",
         dialogs: {
             bookshelf: false,
-            createBookshelf: true,
+            createBookshelf: false,
             createBookshelfConfirmClose: false
         },
         create: {
@@ -47,6 +47,18 @@ new Vue({
         }.bind(this));
     },
     methods: {
+        submitCreateBookshelf: function() {
+            makeRequest("POST", "bookshelves/createnew", {
+                "name": this.create.name,
+                "description": this.create.description,
+                "src": "https://i.pinimg.com/originals/e8/e6/b0/e8e6b077d5a1cdc85298736e1df513eb.jpg" // todo: make this actually work
+            }, function(res) {
+                console.log(res.responseText)
+                this.dialogs.createBookshelf = false
+                this.bookshelves.push(JSON.parse(res.responseText))
+                // sanitize input
+            }.bind(this))
+        },
         closeCreateBookshelf: function() {
             this.dialogs.createBookshelfConfirmClose = true
         },

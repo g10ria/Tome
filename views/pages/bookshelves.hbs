@@ -93,7 +93,7 @@
                 </v-layout>
             </v-container>
 
-            <v-dialog v-model="dialogs.bookshelf" max-width="750" light persistent>
+            <v-dialog v-model="dialogs.bookshelf" max-width="750" light persistent v-if="bookshelves.length!=0">
                 <v-card>
             
                     <v-toolbar color="secondary" dark dense>
@@ -134,10 +134,9 @@
                         <v-form>
                             <v-text-field v-model="create.name" placeholder="Bookshelf name" solo hide-details></v-text-field>
                             <v-textarea v-model="create.description" placeholder="Enter a short description for your bookshelf" solo hide-details class="mt-4 mb-3"></v-textarea>
-                            <v-btn color="tertiary" dark>Create bookshelf</v-btn>
-                            {{!- add a picture --}}
+                            {{!- todo: add picture functionality --}}
+                            <v-btn color="tertiary" @click="submitCreateBookshelf" dark>Create bookshelf</v-btn>
                         </v-form>
-            
                     </v-card-text>
                 </v-card>
             </v-dialog>
