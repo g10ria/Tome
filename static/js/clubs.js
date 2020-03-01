@@ -48,19 +48,6 @@ new Vue({
             this.bookclubs = JSON.parse(res.responseText)
         }.bind(this))
     },
-    mounted: function () {
-        // add arrow key support
-        window.addEventListener("keydown", function (e) {
-
-            // if (e.keyCode == 39)        // right arrow key
-            //     this.incrementCalendarDate()
-            // else if (e.keyCode == 37)   // left arrow key
-            //     this.decrementCalendarDate()
-            // else if (e.keyCode == 84)   // 't' character
-            //     this.resetToToday()
-
-        }.bind(this));
-    },
     methods: {
         logout: function () {
             makeRequest("POST", "/auth/logout", {}, function (res) {

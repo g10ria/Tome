@@ -3,93 +3,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Router = require("koa-router");
 const user_1 = require("../models/user");
 const bookshelf_1 = require("../models/bookshelf");
-const bookclub_1 = require("../models/bookclub");
 const requireAuth_1 = require("../middleware/requireAuth");
 const userHelpers_1 = require("../helpers/userHelpers");
 const bookshelfHelpers_1 = require("../helpers/bookshelfHelpers");
 const mongodb_1 = require("mongodb");
+const bookshelves_1 = require("./bookshelves");
+const bookclubs_1 = require("./bookclubs");
 const router = new Router();
 router.prefix("/user");
 router.use(requireAuth_1.default);
+router.use(bookshelves_1.default.routes());
+router.use(bookclubs_1.default.routes());
 router.get("/", async (ctx, next) => {
     await ctx.render("pages/dash");
-});
-router.get("/bookshelves", async (ctx, next) => {
-    await ctx.render("pages/bookshelves");
-});
-router.post("/bookshelves/createnew", async (ctx, next) => {
-    let body = ctx.request.body;
-    let user = await userHelpers_1.userFromUsername(ctx.session.username);
-    let bookshelf = new bookshelf_1.default({
-        owner: user.id,
-        name: body.name,
-        description: body.description,
-        src: body.src,
-        books: []
-    });
-    await bookshelf.save();
-    await user_1.default.update({ _id: user.id }, { $push: { bookshelves: bookshelf.id } });
-    ctx.body = {
-        owner: user.fullName,
-        name: bookshelf.name,
-        description: bookshelf.description,
-        src: bookshelf.src,
-        bookGIDs: bookshelf.books
-    };
-});
-router.get("/bookshelves/all", async (ctx, next) => {
-    let user = await userHelpers_1.userFromUsername(ctx.session.username);
-    let shelfIDs = user.bookshelves;
-    let ids = shelfIDs.map(id => {
-        return new mongodb_1.ObjectID(id);
-    });
-    let shelves = await bookshelf_1.default.find({
-        _id: { $in: ids }
-    });
-    // clean this
-    let parsedShelves = [];
-    for (let i = 0; i < shelves.length; i++) {
-        let shelf = shelves[i];
-        let owner = await userHelpers_1.userFromID(new mongodb_1.ObjectID(shelf.owner)); // get the name of the owner from their id
-        parsedShelves.push({
-            owner: owner.fullName,
-            name: shelf.name,
-            description: shelf.description,
-            src: shelf.src,
-            bookGIDs: shelf.books,
-            stats: "You've finished 3 out of 6 books on this bookshelf." // todo: actually do this lol
-        });
-    }
-    ctx.body = parsedShelves;
-});
-router.get("/bookshelves/names", async (ctx, next) => {
-    let user = await userHelpers_1.userFromUsername(ctx.session.username);
-    let shelfIDs = user.bookshelves;
-    let ids = shelfIDs.map(id => {
-        return new mongodb_1.ObjectID(id);
-    });
-    let shelves = await bookshelf_1.default.find({
-        _id: { $in: ids }
-    });
-    let names = shelves.map(b => { return b.name; });
-    let shelfids = shelves.map(b => { return b.id; });
-    ctx.body = {
-        names, ids: shelfids
-    };
-});
-router.get("/bookshelves/explore", async (ctx, next) => {
-    let user = await userHelpers_1.userFromUsername(ctx.session.username);
-    // do this lol
-    // let matchingClubs = await Bookclub.find({
-    //     $and: [
-    //         {
-    //             _id: { $nin: ids }
-    //         },
-    //         {
-    //             name: { $regex: new RegExp(ctx.query.query, 'i') }
-    //         }
-    //     ]
-    // })
 });
 router.post("/book/addnew", async (ctx, next) => {
     let body = ctx.request.body;
@@ -124,113 +50,6 @@ router.get("/books/all", async (ctx, next) => {
         });
     }
     ctx.body = parsedBooks;
-});
-router.get("/bookclubs", async (ctx, next) => {
-    await ctx.render("pages/clubs");
-});
-router.post("/bookclubs/join", async (ctx, next) => {
-    let user = await userHelpers_1.userFromUsername(ctx.session.username);
-    let clubID = ctx.request.body.id;
-    let club = await bookclub_1.default.findOne({ _id: clubID });
-    await user_1.default.updateOne({ _id: user.id }, {
-        $push: { bookclubs: clubID }
-    });
-    await bookclub_1.default.updateOne({ _id: clubID }, {
-        $inc: { numMembers: 1 }
-    });
-    // obtain an array of the names of the bookshelves in the club
-    let ids = club.bookshelves;
-    let shelfIDs = ids.map(id => {
-        return new mongodb_1.ObjectID(id);
-    });
-    let shelves = await bookshelf_1.default.find({
-        _id: { $in: shelfIDs }
-    });
-    let bookshelves = shelves.map(shelf => { return shelf.name; });
-    // aggregate the total number of books in the club
-    let numBooks = 0;
-    shelves.forEach(shelf => numBooks += shelf.books.length);
-    // getting the name of the owner
-    let owner = (await userHelpers_1.userFromID(new mongodb_1.ObjectID(club.owner))).fullName;
-    ctx.body = ({
-        owner,
-        name: club.name,
-        description: club.description,
-        bookshelves,
-        numMembers: club.numMembers + 1,
-        numBooks,
-        isOwner: false
-    });
-});
-router.get("/bookclubs/all", async (ctx, next) => {
-    let user = await userHelpers_1.userFromUsername(ctx.session.username);
-    let clubIDs = user.bookclubs;
-    let ids = clubIDs.map(id => {
-        return new mongodb_1.ObjectID(id);
-    });
-    let clubs = await bookclub_1.default.find({
-        _id: { $in: ids }
-    });
-    let parsedClubs = [];
-    // parse through each club and get the needed data
-    // specifically, get the name of each bookshelf that's apart of the club
-    for (let i = 0; i < clubs.length; i++) {
-        // obtain an array of the names of the bookshelves in the club
-        let ids = clubs[i].bookshelves;
-        let shelfIDs = ids.map(id => {
-            return new mongodb_1.ObjectID(id);
-        });
-        let shelves = await bookshelf_1.default.find({
-            _id: { $in: shelfIDs }
-        });
-        let bookshelves = shelves.map(shelf => { return shelf.name; });
-        // aggregate the total number of books in the club
-        let numBooks = 0;
-        shelves.forEach(shelf => numBooks += shelf.books.length);
-        // getting the name of the owner
-        let owner = (await userHelpers_1.userFromID(new mongodb_1.ObjectID(clubs[i].owner))).fullName;
-        // if they are the owner of this book club
-        let isOwner = user.id == clubs[i].owner;
-        parsedClubs.push({
-            owner,
-            name: clubs[i].name,
-            description: clubs[i].description,
-            bookshelves,
-            numMembers: clubs[i].numMembers,
-            numBooks,
-            isOwner
-        });
-    }
-    ctx.body = parsedClubs;
-});
-router.get("/bookclubs/search", async (ctx, next) => {
-    let user = await userHelpers_1.userFromUsername(ctx.session.username);
-    let clubIDs = user.bookclubs;
-    let ids = clubIDs.map(id => {
-        return new mongodb_1.ObjectID(id);
-    });
-    // exact string match for name (case insensitive)
-    let matchingClubs = await bookclub_1.default.find({
-        $and: [
-            {
-                _id: { $nin: ids }
-            },
-            {
-                name: { $regex: new RegExp(ctx.query.query, 'i') }
-            }
-        ]
-    });
-    let parsedMatchingClubs = [];
-    for (let i = 0; i < matchingClubs.length; i++) {
-        parsedMatchingClubs.push({
-            owner: (await userHelpers_1.userFromID(new mongodb_1.ObjectID(matchingClubs[i].owner))).fullName,
-            name: matchingClubs[i].name,
-            numMembers: matchingClubs[i].numMembers,
-            numBookshelves: matchingClubs[i].bookshelves.length,
-            id: matchingClubs[i].id
-        });
-    }
-    ctx.body = parsedMatchingClubs;
 });
 router.get("/journal", async (ctx, next) => {
     await ctx.render("pages/journal");

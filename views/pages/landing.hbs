@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {{> head}}
+    <script src="../js/landing.js" defer></script>
+</head>
+
+<body >
+
+    <div id="app">
+        <v-app v-cloak style="background-color: #048BA8 !important;">
+
+            <v-card class="ma-5 py-5">
+                <v-container class="px-0">
+                    <v-layout>
+                        <v-flex xs5>
+                            <div class="lexend display-4">Tome</div>
+                            <div class="headline ml-2 mb-3">Read more, with friends</div>
+                            <div class="ml-2 mb-3">Tome aims to promote reading in today's content-saturated world. Lorem ipsum, dolor sit amet
+                                consectetur adipisicing elit. Nisi, a suscipit? Sunt ipsum debitis deserunt, qui totam error sit nostrum porro
+                                deleniti libero, vitae enim nam quisquam perferendis magnam sed!</div>
+                            <v-btn color="primary" @click="">Sign up</v-btn>
+                            <v-btn color="secondary" outline @click="goto('/login')">Log in</v-btn>
+                        </v-flex>
+                        <v-spacer></v-spacer>
+                        <v-flex xs6>
+                            <img src="https://image.freepik.com/free-vector/business-idea-concept-with-people_52683-28609.jpg" style="width: 100%">
+                        </v-flex>
+                    </v-layout>
+                </v-container>
+            </v-card>
+        </v-app>
+    </div>
+</body>
+
+</html>
