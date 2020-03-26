@@ -6,8 +6,7 @@
 2. `npm run build`
 3. `npm run start`
 
-## Known Bugs
+## Todos
 - Autocompletes sometimes fills/doesn't fill
 - Nav drawer has no padding on left side on Journal page
 - No input sanitation
-- target=_blank not working for links
